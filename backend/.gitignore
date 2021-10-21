@@ -1,0 +1,4 @@
+songs/migrations
+songs/__pycache__
+backend/__pycache__
+*.pyc
