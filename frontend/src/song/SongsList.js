@@ -19,6 +19,11 @@ class SongsList extends Component {
     async componentDidMount() {
         var self = this;
         songsService.getSongs().then(function (result) {
+            result = result.sort( (s1, s2) => {
+                if (s1.title > s2.title) { return 1; }
+                else if (s2.title > s1.title){ return -1; }
+                else return 0;
+            });
             self.setState({
                 songs: result
             })
@@ -38,7 +43,7 @@ class SongsList extends Component {
     }
 
     handleChange = e => {
-        let { name, value } = e.target;
+        let { value } = e.target;
         this.setState({ search: value });
     };
 
@@ -63,12 +68,12 @@ class SongsList extends Component {
     render() {
         return (
             <div className="song-list">
-                <input onChange={this.handleChange} />
-                <ul>
+                <input className="search" onChange={this.handleChange} autoFocus/>
+                <div className="title-list">
                     {this.state.songs.filter(this.searchFilter).map( s =>
-                        <li onClick={ () => this.handleClick(s.id) } key={s.id}>{s.title}</li>
+                        <div className="song-title" key={s.id} onClick={ () => this.handleClick(s.id) } key={s.id}>{s.title}</div>
                     )}
-                </ul>
+                </div>
             </div>
         );
     }

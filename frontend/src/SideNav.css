@@ -1,0 +1,37 @@
+.sideNav {
+    height: 100vh;
+    position: absolute;
+    
+  }
+
+  
+  .sidenav-toggle {
+    background-color: grey;
+  }
+  
+  .navtext {
+    color: black;
+  }
+
+.toggle-box {
+    padding: 10px;
+    padding-top: 30px;
+    position: fixed;
+    height: 30px;
+    z-index: 99
+}
+
+.nav-item {
+    width: 100%;
+    padding: 10px;
+}
+
+.nav-menu {
+    position: fixed;
+    padding-top: 60px;
+    min-width: 150px;
+}
+
+.nav-menu.hidden {
+    left: -150px;
+}

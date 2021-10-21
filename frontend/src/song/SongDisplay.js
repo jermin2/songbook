@@ -32,7 +32,7 @@ class SongDisplay extends Component {
         
         var lines = this.state.song.text.split("\r\n");
         return(
-            <div><h1>mysong</h1>
+            <div className="lines">
             {lines.map( (line) => this.parseLineType(line) ) }
             </div>
         )

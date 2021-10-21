@@ -43,6 +43,7 @@ body {
 .chord {
   position: absolute;
   bottom: 17px;
+  color: blue;
 }
 
 .chord-word {
@@ -60,7 +61,41 @@ body {
   margin-left: -25px;
 }
 
-.song {
+.song, .song-list{
   max-width: 300px;
+  margin: auto;
+}
+
+.song {
+  width: fit-content;
+}
+
+
+.song-title {
+  font-size: 18px;
+  padding: 6px;
+  text-align: center;
+}
+
+.song-title:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.search {
+  width: 100%;
+  padding: 6px;
+}
+
+.title {
+  padding: 50px;
+  text-align: center;
+}
+
+.main {
+  display:flex;
+}
+
+.app {
   margin: auto;
 }
