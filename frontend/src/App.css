@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+body {
+  line-height: 18px;
+}
+
+.chord {
+  position: absolute;
+  bottom: 17px;
+}
+
+.chord-word {
+  position: relative;
+  padding-top: 17px;
+  display: inline-block;
+}
+
+.line-text {
+  vertical-align: bottom;
+}
+
+.verse-number {
+  position:absolute;
+  margin-left: -25px;
+}
