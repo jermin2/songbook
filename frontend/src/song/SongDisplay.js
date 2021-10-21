@@ -17,7 +17,7 @@ class SongDisplay extends Component {
 
     componentDidMount(){
         const { match: { params } } =  this.props;
-        console.log(params.id);
+
         if (params && params.id){
             var self = this;
             songsService.getSong(params.id).then(function (result) {
@@ -25,7 +25,6 @@ class SongDisplay extends Component {
                     song: result
                 })
 
-                console.log(self.state);
             })
         }
     }
