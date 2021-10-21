@@ -47,9 +47,11 @@ class SongsList extends Component {
         
         const search = this.state.search;
 
-        // Remove the chords and newlines from the string
-        const searchString = song.text.replace(/\[(.*?)\]/im, "").replace(/\n\r|\r\n|\n/img, " ");
-
+        // Remove the chords, comments, newlines from the string
+        const searchString = song.text.replace(/\[(.*?)\]/img, "") //remove chords
+        .replace(/#[\s\S]+?$/gim, "") //remove comments
+        .replace(/(\n\r)+|(\r\n)+|\n+/img, " "); //remove new lines
+        
         // search through the string (the 'i' flag means case insensitive)
         if (searchString.search( new RegExp(search, 'img') ) !== -1){
             return true;
