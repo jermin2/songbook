@@ -24,7 +24,6 @@ class SongDisplay extends Component {
                 self.setState({
                     song: result
                 })
-
             })
         }
     }
@@ -40,7 +39,7 @@ class SongDisplay extends Component {
     }
 
     parseLineType = (line) => {
-        if (line[0] === '#'){ return ( <div className="line"><span className="comment">found a comment</span></div>); } //Comments
+        if (line[0] === '#'){ return ( <div className="line">{this.parseComment(line)}</div>); } //Comments
         if (line.search( /^\d/ig) > -1 ){ 
             return ( <div className="verse-number">{line}</div>); } //Numbers
         else {  
@@ -51,9 +50,13 @@ class SongDisplay extends Component {
             } 
             else {
                 //return the line if no chords
-                return ( <div className="line"><span className="line-text">{line}</span></div>)
+                return ( <div className="line"><span className="line-text">{line}&nbsp;</span></div>)
             }
         }
+    }
+    parseComment = (comment) => {
+        const commented_edit = comment.split(/^#\s*/gm);
+        return ( <span className="comment"><em>{commented_edit[1]}</em></span> )
     }
 
     parseWords = (word) => {
@@ -76,9 +79,7 @@ class SongDisplay extends Component {
 
     render() {
         return(
-        <div>
-            <div>{this.parseSong()}</div>
-        </div>
+            <div className="song">{this.parseSong()}</div>
         )
     }
 }
