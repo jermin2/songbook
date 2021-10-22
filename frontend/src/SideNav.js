@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import HamburgerMenu from 'react-hamburger-menu'
+import BookList from './book/BookList'
 
 import './SideNav.css';
 
@@ -22,7 +23,7 @@ class SideNav extends Component {
     render() {
         return (
             <div className="sideNav">
-                <div className="toggle-box">
+                <div className="toggle-box" onClick={this.handleClick}>
                 <HamburgerMenu
                     isOpen={this.state.isOpen}
                     menuClicked={this.handleClick}
@@ -33,11 +34,14 @@ class SideNav extends Component {
                     color='black'
                     borderRadius={0}
                     animationDuration={0.5}
+                    className="toggle"
                 />
                 </div>
                 <div className={this.state.isOpen ? "nav-menu" : "nav-menu hidden"}>
                     <div className="nav-item">Login</div>
+                    
                     <div className="nav-item">Books</div>
+                    < BookList />
                 </div>
             </div>
             

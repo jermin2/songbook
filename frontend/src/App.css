@@ -77,7 +77,12 @@ body {
   text-align: center;
 }
 
-.song-title:hover {
+.toggle:hover{
+  font-weight: bold;
+  cursor: pointer;
+  stroke-width:2px;
+}
+.song-title:hover{
   font-weight: bold;
   cursor: pointer;
 }

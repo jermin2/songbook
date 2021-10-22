@@ -14,7 +14,7 @@ class App extends Component {
       <div className="main">
         <SideNav />
         <div className="app">
-          <h1 class="title">Song Book</h1>
+          <h1 className="title">Song Book</h1>
 
           <div className="content">
             <Route path="/" exact component={SongsList} />

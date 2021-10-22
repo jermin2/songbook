@@ -10,7 +10,7 @@ class Song(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    year = models.IntegerField()
+    year = models.IntegerField(blank=True)
     songs = models.ManyToManyField(Song, related_name="books", through="BookSongs")
 
     def _str_(self):
