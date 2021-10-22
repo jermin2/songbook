@@ -5,6 +5,9 @@ from .models import *
 class SongAdmin(admin.ModelAdmin):
     list = ('title', 'text')
 
+class BookAdmin(admin.ModelAdmin):
+    list = ('title', 'year', 'songs')
+
 admin.site.register(Song, SongAdmin)
-admin.site.register(Book)
+admin.site.register(Book, BookAdmin)
 admin.site.register(BookSongs)

@@ -21,6 +21,7 @@ from songs import views
 
 router = routers.DefaultRouter()
 router.register(r'song', views.SongView, 'song')
+router.register(r'book', views.BookView, 'book')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
