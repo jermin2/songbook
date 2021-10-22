@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 
 import BookService from './BookService';
 
@@ -17,6 +18,7 @@ class BookList extends Component {
 
     async componentDidMount() {
         var self = this;
+
         bookService.getBooks().then(function (result) {
             result = result.sort( (s1, s2) => {
                 if (s1.title > s2.title) { return 1; }
@@ -27,6 +29,7 @@ class BookList extends Component {
                 books: result
             })
         })
+        
     }
 
     handleDelete(e, id){
@@ -34,11 +37,6 @@ class BookList extends Component {
             var newArr = this.state.books.filter( (s)=> {return s.id !== id;} );
             this.setState({ books: newArr}); 
         })
-    }
-
-    // Load the song
-    handleClick(id) {
-        // this.props.history.push(`/book/${id}`);
     }
 
     handleChange = e => {
@@ -50,7 +48,7 @@ class BookList extends Component {
         return (
                 <div className="book-list">
                     {this.state.books.map( b =>
-                        <div className="book-title" key={b.id} onClick={ () => this.handleClick(b.id) } key={b.id}>{b.title}</div>
+                        <div className="book-title" key={b.id}><Link to={`/book/${b.id}`}>{b.title}</Link></div>
                     )}
                 </div>
         );

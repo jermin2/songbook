@@ -40,6 +40,11 @@ body {
   line-height: 18px;
 }
 
+a {
+  text-decoration:none;
+  color: black;
+}
+
 .chord {
   position: absolute;
   bottom: 17px;
@@ -103,4 +108,9 @@ body {
 
 .app {
   margin: auto;
+}
+
+.book-title {
+  text-align: center;
+  padding: 10px;
 }

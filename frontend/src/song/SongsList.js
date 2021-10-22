@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 
 import SongsService from './SongsService';
 
@@ -9,15 +10,23 @@ class SongsList extends Component {
         super(props);
         this.state = {
             songs: [],
-            search: ""
+            sorted_songs: [],
+            search: "",
+            mode: "",
+            book: {
+                songs: []
+            }
         };
 
         this.handleDelete = this.handleDelete.bind(this);
         this.searchFilter = this.searchFilter.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     async componentDidMount() {
         var self = this;
+
+        // Get a list of all the songs then sort them
         songsService.getSongs().then(function (result) {
             result = result.sort( (s1, s2) => {
                 if (s1.title > s2.title) { return 1; }
@@ -25,9 +34,28 @@ class SongsList extends Component {
                 else return 0;
             });
             self.setState({
-                songs: result
+                songs: result,
+                sorted_songs: result
             })
         })
+        
+    }
+
+    componentDidUpdate(preProps, prevState) {
+
+        // If a new book is being given, and it is different from the existing book
+        if(this.props.book && (this.state.book !== this.props.book )) {
+
+            //filter the list of songs by the songs in the book
+            const songs = this.state.sorted_songs.filter( (song) => {
+                return  this.props.book.songs.includes(song.id);
+            })
+
+            this.setState({
+                songs: songs,
+                book: this.props.book
+            })
+        }
     }
 
     handleDelete(e, id){
@@ -71,7 +99,8 @@ class SongsList extends Component {
                 <input className="search" onChange={this.handleChange} autoFocus/>
                 <div className="title-list">
                     {this.state.songs.filter(this.searchFilter).map( s =>
-                        <div className="song-title" key={s.id} onClick={ () => this.handleClick(s.id) } key={s.id}>{s.title}</div>
+                        <div className="song-title" key={s.id}>
+                            <Link to={`/song/${s.id}`}>{s.title}</Link></div>
                     )}
                 </div>
             </div>

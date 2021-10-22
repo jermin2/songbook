@@ -37,9 +37,11 @@
 .nav-menu {
     position: fixed;
     padding-top: 60px;
-    min-width: 150px;
+    width: 200px;
+    background-color:lightgray;
+    height: 100vh;
 }
 
 .nav-menu.hidden {
-    left: -150px;
+    left: -200px;
 }
