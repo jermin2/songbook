@@ -1,8 +1,8 @@
 .sideNav {
     height: 100vh;
-    position: absolute;
-    
-  }
+}
+
+
 
   
   .sidenav-toggle {
@@ -35,7 +35,7 @@
 }
 
 .nav-menu {
-    position: fixed;
+    position: relative;
     padding-top: 60px;
     width: 200px;
     background-color:lightgray;
@@ -44,4 +44,5 @@
 
 .nav-menu.hidden {
     left: -200px;
+    position: fixed;
 }

@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import BookService from './BookService'
 
 import SongsList from '../song/SongsList'
+import SongDisplay from '../song/SongDisplay'
+
 
 const bookService = new BookService()
 
@@ -13,9 +15,13 @@ class BookDisplay extends Component {
             book: {
                 id: -1,
                 title: "",
-                songs: []
-            }
+                songs: [],
+            },
+            widescreen: true,
+            selectedSong: -1
         }
+
+        this.setId = this.setId.bind(this);
     }
 
     componentDidMount() {
@@ -33,6 +39,7 @@ class BookDisplay extends Component {
 
 
     componentDidUpdate(preProps, prevState) {
+        
         //Check we have a valid book input
         const { match: {params} } = this.props;
         if(params && params.id) {
@@ -44,20 +51,33 @@ class BookDisplay extends Component {
                 //Fetch the new book
                 bookService.getBook(params.id).then(function(result) {
                     self.setState({
-                        book: result
+                        book: result,
+                        selectedSong: result.songs[0]
                     })
                 })
             }
         }
-        
+    }
+
+    // Callback function used by songlist to indicate a selection of a song
+    setId(id){
+        this.setState({
+            selectedSong: id
+        })
     }
 
     render() {
         return (
-            <div>
-                <h2 className="book-name">{this.state.book.title}</h2>
-                < SongsList book={this.state.book} mode="book"/>
-
+            <div className="book-display-parent">
+                <div className="book-display">
+                    <h2 className="book-name">{this.state.book.title}</h2>
+                    < SongsList book={this.state.book} widescreen={true} setId={this.setId}/>
+                </div>
+                { this.state.selectedSong > -1 &&
+                    <div className="book-display-song">
+                        < SongDisplay id={this.state.selectedSong} widescreen={this.state.widescreen}/>
+                    </div>
+                }
             </div>
             
         )

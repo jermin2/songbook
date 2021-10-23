@@ -40,9 +40,14 @@ body {
   line-height: 18px;
 }
 
+
 a {
   text-decoration:none;
   color: black;
+}
+
+.app {
+  width: 100%;
 }
 
 .chord {
@@ -108,9 +113,49 @@ a {
 
 .app {
   margin: auto;
+  height: 100vh;
 }
 
 .book-title {
   text-align: center;
   padding: 10px;
+}
+
+.book-display-parent, .edit-song-parent {
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+  position: relative;
+}
+
+.book-name {
+  text-align: center;
+}
+
+.book-display, .edit-song-form {
+  width: 50%;
+}
+
+.book-display-song, .edit-song-display {
+  width: 50%;
+}
+
+.edit-song-textarea {
+  height: 50vh;
+}
+
+.edit-song-form {
+  padding: 20px;
+}
+
+.song-controls {
+  display: flex;
+  justify-content: right;
+  padding-bottom: 30px;
+}
+
+.song-control-link {
+  display: inline;
+  padding-right: 20px;
 }

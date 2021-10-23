@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import SongsService from './SongsService';
 
@@ -9,28 +10,90 @@ class SongDisplay extends Component {
         super(props);
         this.state = {
             song: {
+                id: -1,
                 title: "",
                 text: ""
             }
         }
+
+        const uniqueId = 0;
     }
 
     componentDidMount(){
-        const { match: { params } } =  this.props;
 
-        if (params && params.id){
-            var self = this;
-            songsService.getSong(params.id).then(function (result) {
-                self.setState({
-                    song: result
-                })
+        if (this.props.mode && this.props.mode === "BY_SONG") {
+            console.log("mount", "by song")
+        }
+
+        const id = this.props.id;
+        if( id ){
+            return this.getSong(id);
+        }
+        else {
+            // Handle URL
+            const { match: { params } } =  this.props;
+            if (params && params.id){
+                return this.getSong(params.id);
+            }
+        }
+    }
+
+    getUniqueId(){
+        this.uniqueId = this.uniqueId + 1;
+        return this.uniqueId;
+    }
+
+    getSong(id){
+        if(parseInt(this.state.song.id) === parseInt(id)) { return false; }
+        var self = this;
+        songsService.getSong(id).then(function (result) {
+            self.setState({
+                song: result
             })
+        })
+        
+    }
+
+    componentDidUpdate(){
+
+        if (this.props.mode && this.props.mode === "BY_SONG") {
+            
+            if (this.state.song.id === this.props.song.id){
+                return
+            }
+            console.log("songdisplay", this.props);
+            return this.setState({
+                song: this.props.song
+            })
+        }
+
+        const id = this.props.id;
+        if( id ){
+            return this.getSong(id);
+        }
+        else {
+            // Handle URL
+            const { match: { params } } =  this.props;
+            if (params && params.id){
+                return this.getSong(params.id);
+            }
         }
     }
 
     parseSong = () =>{
+
+        //If in SONG_MODE, then parse the song from props instead of state
+        if (this.props.mode && this.props.mode === "BY_SONG" ) {
+            var song_text = this.props.song.text
+        }
+        else {
+            var song_text = this.state.song.text
+        }
+
+        // Sanitize the inputs
+        var song_text = song_text.replace(/(\r\n)|\r|\n/igm, '\n')
+        var lines = song_text.split("\n");
         
-        var lines = this.state.song.text.split("\r\n");
         return(
             <div className="lines">
             {lines.map( (line) => this.parseLineType(line) ) }
@@ -39,18 +102,18 @@ class SongDisplay extends Component {
     }
 
     parseLineType = (line) => {
-        if (line[0] === '#'){ return ( <div className="line">{this.parseComment(line)}</div>); } //Comments
+        if (line[0] === '#'){ return ( <div className="line" key={this.getUniqueId}>{this.parseComment(line)}</div>); } //Comments
         if (line.search( /^\d/ig) > -1 ){ 
             return ( <div className="verse-number">{line}</div>); } //Numbers
         else {  
             // Check for chords
             if (line.search(/\[/) > -1) {
                 var words = line.split(" ");
-                return ( <div className="line"><span className="line-text">{words.map( word => this.parseWords(word))}</span></div> ); 
+                return ( <div className="line" key={line}><span className="line-text">{words.map( word => this.parseWords(word))}</span></div> ); 
             } 
             else {
                 //return the line if no chords
-                return ( <div className="line"><span className="line-text">{line}&nbsp;</span></div>)
+                return ( <div className="line" key={line}><span className="line-text">{line}&nbsp;</span></div>)
             }
         }
     }
@@ -65,12 +128,12 @@ class SongDisplay extends Component {
         const arr = word.split ( /(\[.*?\])/ );
 
         return (
-            <span className="chord-word">{
+            <span className="chord-word" key={word}>{
             arr.map( word_chord => {
                 // If its a chord
                 if( word_chord[0] === "["){
                     const chord = word_chord.split( /\[(.*?)\]/ );
-                    return ( <span className="chord">{chord[1]}</span>);
+                    return ( <span className="chord" key={word_chord}>{chord[1]}</span>);
                 } else {   return word_chord;  } // otherwise just return the 'part word'
             })
             }&nbsp;</span> //need a space after each word
@@ -78,9 +141,27 @@ class SongDisplay extends Component {
     }
 
     render() {
-        return(
-            <div className="song">{this.parseSong()}</div>
-        )
+        if(this.props.widescreen){
+            
+            return (
+                <div>
+                    <div className="song-controls">
+                        <div className="song-control-link">
+                            <Link className="song-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
+                        </div>
+                        <div className="song-control-link">
+                            <Link className="song-link" to={`/song/${this.state.song.id}`}>Full Screen</Link>
+                        </div>
+                    </div>
+                    <div className="song">{this.parseSong()}</div>
+                </div>
+            )
+        }
+        else {
+            return(
+                <div className="song">{this.parseSong()}</div>
+            )
+        }
     }
 }
 

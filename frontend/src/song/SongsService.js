@@ -24,7 +24,7 @@ export default class SongsService {
     }
 
     updateSong(song){
-        const url = `${API_URL}/api/song/${song.id}`;
+        const url = `${API_URL}/api/song/${song.id}/`;
         return axios.put(url, song);
     }
 }

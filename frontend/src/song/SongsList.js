@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 
 import SongsService from './SongsService';
+import SongDisplay from './SongDisplay'
 
 const songsService = new SongsService();
 
@@ -12,10 +12,11 @@ class SongsList extends Component {
             songs: [],
             sorted_songs: [],
             search: "",
-            mode: "",
             book: {
                 songs: []
-            }
+            },
+            widescreen: false,
+            selectedSong: -1
         };
 
         this.handleDelete = this.handleDelete.bind(this);
@@ -33,9 +34,12 @@ class SongsList extends Component {
                 else if (s2.title > s1.title){ return -1; }
                 else return 0;
             });
+
+            const widescreen = self.props.widescreen ? true : false
             self.setState({
                 songs: result,
-                sorted_songs: result
+                sorted_songs: result,
+                widescreen: widescreen
             })
         })
         
@@ -65,9 +69,16 @@ class SongsList extends Component {
         })
     }
 
-    // Load the song
+    // Handle clicking on song. If the widescreen flag is set, feedback the song id instead of pushing it to the url
     handleClick(id) {
-        this.props.history.push(`/song/${id}`);
+
+        if(this.state.widescreen){
+            this.props.setId(id);
+        }
+        else {
+            this.props.history.push(`/song/${id}`);
+        }
+        
     }
 
     handleChange = e => {
@@ -95,13 +106,22 @@ class SongsList extends Component {
 
     render() {
         return (
-            <div className="song-list">
-                <input className="search" onChange={this.handleChange} autoFocus/>
-                <div className="title-list">
-                    {this.state.songs.filter(this.searchFilter).map( s =>
-                        <div className="song-title" key={s.id}>
-                            <Link to={`/song/${s.id}`}>{s.title}</Link></div>
-                    )}
+            <div> 
+                <div className="song-list">
+                    <input className="search" onChange={this.handleChange} autoFocus/>
+                    <div className="title-list">
+                        {this.state.songs.filter(this.searchFilter).map( s =>
+                            <div className="song-title" key={s.id} onClick={()=>this.handleClick(s.id)}>
+                                {s.title}</div>
+                        )}
+                    </div>
+                </div>
+                <div>
+                    { this.state.selectedSong > -1 &&
+                        <div className="book-display-song">
+                            < SongDisplay id={this.state.selectedSong} />
+                        </div>
+                    }
                 </div>
             </div>
         );

@@ -38,7 +38,7 @@ class SideNav extends Component {
                 />
                 </div>
                 <div className={this.state.isOpen ? "nav-menu" : "nav-menu hidden"}>
-                    <div className="nav-item">Login</div>
+                    <div className="nav-item" onClick={ ()=> this.props.toggleLogin()}>Login</div>
                     
                     <div className="nav-item">Books</div>
                     < BookList />
