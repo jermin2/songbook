@@ -21,42 +21,36 @@ class BookView(viewsets.ReadOnlyModelViewSet):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
 
-# this decorator is essential
-@api_view(['GET', 'DELETE'])
-def test_token(request):
-
-    if request.user.is_authenticated:
-        print("I am logged in")
-    else:
-        print("i am not")
-    return JsonResponse({
-        "method":request.method,
-        "user":str(request.user)
-    },
-    status=200)
-
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])
 @api_view(['GET', 'PUT'])
-def edit_song(request, id):
-    # if request.method == "PUT":
-    print(request.user)    
+def edit_song(request, id):  
 
     if request.user.is_anonymous:
         return JsonResponse({
             "data":request.method,
             "d": id
-            }, status=200)
+            }, status=401)
     
+    # Write the song to the database
 
-    return JsonResponse({
-        "data": "something yes",
-        "user": str(request.user)
-    },status=200)    
-    
-    
+    # Get new post data
+    data = json.loads(request.body)
+    print(data)
 
-    return JsonResponse({
-        "data":"some data i don't know"
-    },
-    status=401)
+    song = Song.objects.get(id = int(data.get('id')))
+
+    # Add or remove the song from the user's favourites
+    try:
+        song.title = data.get('title')
+        song.text = data.get('text')
+        song.save()
+
+        return JsonResponse({
+            "content": "success"
+        }, status=200)
+    
+    except:
+        return JsonResponse({
+            "fail":"fail"
+        }, status=500)

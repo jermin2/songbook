@@ -21,10 +21,6 @@ class SongDisplay extends Component {
 
     componentDidMount(){
 
-        if (this.props.mode && this.props.mode === "BY_SONG") {
-            console.log("mount", "by song")
-        }
-
         const id = this.props.id;
         if( id ){
             return this.getSong(id);
@@ -61,7 +57,6 @@ class SongDisplay extends Component {
             if (this.state.song.id === this.props.song.id){
                 return
             }
-            console.log("songdisplay", this.props);
             return this.setState({
                 song: this.props.song
             })

@@ -29,6 +29,8 @@ export default class SongsService {
         return axios.put(url, song, {
             headers: { "Authorization": `Bearer ${token}` },
             
+        }).then(response => {
+            console.log(response.data)
         })
     }
 

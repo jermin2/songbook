@@ -33,9 +33,6 @@ class SongEdit extends Component {
         }
     }
 
-    componentDidUpdate(){
-        console.log("update", this.props)
-    }
 
     handleChange = (event) => {
 
