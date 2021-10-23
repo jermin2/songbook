@@ -12,9 +12,16 @@ class SideNav extends Component {
         }
 
         this.handleClick = this.handleClick.bind(this);
+        this.toggleSideNav = this.toggleSideNav.bind(this);
     }
 
     handleClick() {
+        this.setState({
+            isOpen: !this.state.isOpen
+        })
+    }
+
+    toggleSideNav() {
         this.setState({
             isOpen: !this.state.isOpen
         })
@@ -41,7 +48,7 @@ class SideNav extends Component {
                     <div className="nav-item" onClick={ ()=> this.props.toggleLogin()}>Login</div>
                     
                     <div className="nav-item">Books</div>
-                    < BookList />
+                    < BookList toggleSideNav={this.toggleSideNav}/>
                 </div>
             </div>
             

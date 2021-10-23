@@ -78,6 +78,7 @@ a {
 
 .song {
   width: fit-content;
+  margin-bottom: 20px;
 }
 
 
@@ -103,17 +104,12 @@ a {
 }
 
 .title {
-  padding: 50px;
+  padding: 30px;
   text-align: center;
 }
 
 .main {
   display:flex;
-}
-
-.app {
-  margin: auto;
-  height: 100vh;
 }
 
 .book-title {
@@ -152,7 +148,7 @@ a {
 .song-controls {
   display: flex;
   justify-content: right;
-  padding-bottom: 30px;
+  padding-bottom: 10px;
 }
 
 .song-control-link {

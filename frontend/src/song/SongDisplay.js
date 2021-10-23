@@ -154,7 +154,14 @@ class SongDisplay extends Component {
         }
         else {
             return(
-                <div className="song">{this.parseSong()}</div>
+                <div>
+                    <div className="song-controls">
+                        <div className="song-control-link">
+                            <Link className="song-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
+                        </div>
+                    </div>
+                    <div className="song">{this.parseSong()}</div>
+                </div>
             )
         }
     }

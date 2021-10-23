@@ -35,11 +35,12 @@
 }
 
 .nav-menu {
-    position: relative;
+    position: fixed;
     padding-top: 90px;
     width: 200px;
     background-color:lightgray;
     height: 100vh;
+    z-index: 10
 }
 
 .nav-menu.hidden {

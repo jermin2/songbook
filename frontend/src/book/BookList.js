@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import BookService from './BookService';
@@ -14,6 +15,7 @@ class BookList extends Component {
         };
 
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     async componentDidMount() {
@@ -44,11 +46,16 @@ class BookList extends Component {
         this.setState({ search: value });
     };
 
+    handleClick(id){
+        this.props.toggleSideNav();
+        this.props.history.push(`/book/${id}/`);
+    }
+
     render() {
         return (
                 <div className="book-list">
                     {this.state.books.map( b =>
-                        <div className="book-title" key={b.id}><Link to={`/book/${b.id}`}>{b.title}</Link></div>
+                        <div className="book-title" key={b.id} onClick={ () => this.handleClick(b.id)}>{b.title}</div>
                     )}
                 </div>
         );
@@ -57,4 +64,4 @@ class BookList extends Component {
 
 
 
-export default BookList;
+export default withRouter(BookList);
