@@ -16,7 +16,7 @@ class SongDisplay extends Component {
             }
         }
 
-        const uniqueId = 0;
+        // const uniqueId = 0;
     }
 
     componentDidMount(){
@@ -87,12 +87,12 @@ class SongDisplay extends Component {
             var song_text = this.props.song.text
         }
         else {
-            var song_text = this.state.song.text
+            song_text = this.state.song.text
         }
 
         // Sanitize the inputs
-        var song_text = song_text.replace(/(\r\n)|\r|\n/igm, '\n')
-        var lines = song_text.split("\n");
+        var song_text_sanitised = song_text.replace(/(\r\n)|\r|\n/igm, '\n')
+        var lines = song_text_sanitised.split("\n");
         
         return(
             <div className="lines">

@@ -24,7 +24,12 @@ export default class SongsService {
     }
 
     updateSong(song){
-        const url = `${API_URL}/api/song/${song.id}/`;
-        return axios.put(url, song);
+        const url = `${API_URL}/api/song/${song.id}/edit`;
+        const token = sessionStorage.getItem("token");
+        return axios.put(url, song, {
+            headers: { "Authorization": `Bearer ${token}` },
+            
+        })
     }
+
 }
