@@ -89,7 +89,8 @@ class BookEdit extends Component {
     // TO DELETE
     handleClick = () => {
         console.log("click");
-        console.log(this.state.book.songs)
+        console.log(this.state.book)
+        bookService.updateBook(this.state.book);
     }
 
 

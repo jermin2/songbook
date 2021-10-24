@@ -24,7 +24,13 @@ export default class BookService {
     }
 
     updateBook(book){
-        const url = `${API_URL}/api/book/${book.id}`;
-        return axios.put(url, book);
+        const url = `${API_URL}/api/book/${book.id}/edit`;
+        const token = sessionStorage.getItem("token");
+        return axios.put(url, book, {
+            headers: { "Authorization": `Bearer ${token}` },
+            
+        }).then(response => {
+            console.log(response.data)
+        })
     }
 }

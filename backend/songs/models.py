@@ -19,7 +19,7 @@ class Book(models.Model):
 class BookSongs(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    index = models.IntegerField()
+    index = models.IntegerField(blank=True)
     variant = models.TextField(blank=True)
 
     class Meta:

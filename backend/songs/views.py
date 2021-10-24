@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .serializers import SongSerializer, BookSerializer
 from rest_framework import viewsets
-from .models import Song, Book
+from .models import Song, Book, BookSongs
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -27,12 +27,7 @@ class BookView(viewsets.ReadOnlyModelViewSet):
 def edit_song(request, id):  
 
     if request.user.is_anonymous:
-        return JsonResponse({
-            "data":request.method,
-            "d": id
-            }, status=401)
-    
-    # Write the song to the database
+        return JsonResponse({"data":request.method}, status=401)
 
     # Get new post data
     data = json.loads(request.body)
@@ -46,11 +41,39 @@ def edit_song(request, id):
         song.text = data.get('text')
         song.save()
 
-        return JsonResponse({
-            "content": "success"
-        }, status=200)
+        return JsonResponse({ "content": "success"}, status=200)
     
     except:
-        return JsonResponse({
-            "fail":"fail"
-        }, status=500)
+        return JsonResponse({"fail":"fail"}, status=500)
+
+
+# @authentication_classes([SessionAuthentication, BasicAuthentication])
+# @permission_classes([IsAuthenticated])
+@api_view(['GET', 'PUT'])
+def edit_book(request, id):  
+
+    if request.user.is_anonymous:
+        return JsonResponse({"data":request.method}, status=401)
+
+    # Get new post data
+    data = json.loads(request.body)
+    songs = data.get('songs')
+
+    book = Book.objects.get(id = int(data.get('id')))
+
+    # Delete all the songs in the book
+    book.songs.clear()
+
+    for song_id in songs:
+        s = Song.objects.get(id=song_id)
+        print(s.title)
+        BookSongs.objects.create(
+            book=book,
+            song=s,
+            index=1
+        )
+    #     book.songs.add(s)
+
+    book.save()
+
+    return JsonResponse({ "content": "success"}, status=200)
