@@ -68,14 +68,14 @@ class BookDisplay extends Component {
 
     render() {
         return (
-            <div className="book-display-parent">
-                <div className="book-display">
+            <div className="book-display-parent widescreen-parent">
+                <div className="book-display widescreen">
                     <h2 className="book-name">{this.state.book.title}</h2>
-                    < SongsList book={this.state.book} widescreen={true} setId={this.setId}/>
+                    < SongsList book={this.state.book} mode={'BOOK_LIST'} setId={this.setId}/>
                 </div>
                 { this.state.selectedSong > -1 &&
-                    <div className="book-display-song">
-                        < SongDisplay id={this.state.selectedSong} widescreen={this.state.widescreen}/>
+                    <div className="book-display-song widescreen">
+                        < SongDisplay id={this.state.selectedSong} />
                     </div>
                 }
             </div>

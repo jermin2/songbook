@@ -50,8 +50,8 @@ class SongEdit extends Component {
 
     render() {
         return (
-            <div className="edit-song-parent">
-                <div className="edit-song-form">
+            <div className="edit-song-parent widescreen-parent">
+                <div className="edit-song-form widescreen">
                 <Form>
                     <Form.Group className="mb-3">
                         <Form.Control type="text" name="title" placeholder="Title" value={this.state.song.title} onChange={this.handleChange} />
@@ -62,8 +62,8 @@ class SongEdit extends Component {
                     <Button onClick={this.handleSave}>Save</Button>
                 </Form>
                 </div>
-                <div className="edit-song-display">
-                    < SongDisplay mode="BY_SONG" id={4} song={this.state.song} widescreen={true}/>
+                <div className="edit-song-display widescreen">
+                    < SongDisplay mode="BY_SONG" id={4} song={this.state.song}/>
                 </div>
             </div>
             

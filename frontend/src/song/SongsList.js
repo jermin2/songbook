@@ -3,7 +3,16 @@ import React, { Component } from 'react';
 import SongsService from './SongsService';
 import SongDisplay from './SongDisplay'
 
+import {Bucket} from './SongListBucket'
+
+
 const songsService = new SongsService();
+
+// Modes
+const BOOK_EDIT = 'BOOK_EDIT'; // Allow drag and drop to add/remove songs
+const BOOK_EDIT_SELECT = 'BOOK_EDIT_SELECT'; // Allow drag and drop to add/remove songs
+const BOOK_LIST = 'BOOK_LIST'; // Feedback the selected song instead of displayin the song
+const SONG_LIST = 'SONG_LIST'; // Selecting a song displays the song
 
 class SongsList extends Component {
     constructor(props) {
@@ -15,14 +24,16 @@ class SongsList extends Component {
             book: {
                 songs: []
             },
-            widescreen: false,
+            mode: SONG_LIST,
             selectedSong: -1
         };
+
 
         this.handleDelete = this.handleDelete.bind(this);
         this.searchFilter = this.searchFilter.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
+
 
     async componentDidMount() {
         var self = this;
@@ -34,12 +45,11 @@ class SongsList extends Component {
                 else if (s2.title > s1.title){ return -1; }
                 else return 0;
             });
-
-            const widescreen = self.props.widescreen ? true : false
+            const mode = self.props.mode ? self.props.mode : SONG_LIST
             self.setState({
                 songs: result,
                 sorted_songs: result,
-                widescreen: widescreen
+                mode: mode
             })
         })
         
@@ -49,15 +59,54 @@ class SongsList extends Component {
 
         // If a new book is being given, and it is different from the existing book
         if(this.props.book && (this.state.book !== this.props.book )) {
+            
 
-            //filter the list of songs by the songs in the book
-            const songs = this.state.sorted_songs.filter( (song) => {
-                return  this.props.book.songs.includes(song.id);
+            if(this.state.mode === BOOK_EDIT ){
+                // If the song lists are the same length, then nothing to edit
+                if (this.state.songs.length === this.props.book.songs.length) {
+                    return;
+                }
+
+                const songsList = []
+
+                // Using the given book list (its in [3,4] format), crosscheck with the database to get all the other info like title
+                this.props.book.songs.forEach( s => {
+                    const k = this.state.sorted_songs.find( e => e.id === s) 
+                    
+                    // While we are at it, all the songs in props should have the selected tag set to true
+
+                    songsList.push(k)
+                } )
+
+                //  set the new state
+                this.setState({
+                    songs: songsList
+                })
+            } 
+            else
+            {
+                 
+                //filter the list of songs by the songs in the book
+                const songs = this.state.sorted_songs.filter( (song) => {
+                    return this.props.book.songs.includes(song.id)
+                })
+
+                this.setState({
+                    songs: songs,
+                    book: this.props.book
+                })
+
+            }
+        }
+        else if (this.state.mode === BOOK_EDIT_SELECT && preProps.selected.length !== this.props.selected.length) {
+            const newSongList = [...this.state.sorted_songs];
+            this.props.selected.forEach( s => {
+                const selSong = newSongList.find( e => e.id === s);
+                selSong.selected = true;
             })
 
             this.setState({
-                songs: songs,
-                book: this.props.book
+                songs: newSongList
             })
         }
     }
@@ -69,11 +118,36 @@ class SongsList extends Component {
         })
     }
 
-    // Handle clicking on song. If the widescreen flag is set, feedback the song id instead of pushing it to the url
+    // Handle clicking on song. If the input_song flag is set, feedback the song id instead of pushing it to the url
     handleClick(id) {
 
-        if(this.state.widescreen){
+
+        if(this.state.mode === BOOK_LIST){
             this.props.setId(id);
+        }
+        // BOOK_EDIT_SELECT - select a song. 
+        else if(this.state.mode === BOOK_EDIT_SELECT) {
+            this.props.setId(id);
+
+            // Make a copy of the state
+            const songState = [...this.state.songs]
+
+            // Get the index in the array of the song
+            const ind = songState.findIndex( (song) => song.id === id);
+            
+            // Get the song
+            const selected_song = songState[ind];
+
+            // Set the selected flag or toggle it
+            selected_song.selected  = selected_song.selected ? false : true;
+            
+            // replace the song in the list of songs
+            songState[ind] = selected_song;
+
+            // write out the new state
+            this.setState({
+                songs: songState
+            })
         }
         else {
             this.props.history.push(`/song/${id}`);
@@ -105,19 +179,32 @@ class SongsList extends Component {
 
 
     render() {
+
+        if(this.state.mode === 'BOOK_EDIT') {
+            return(
+            <div className="song-list">
+                <input className="search" onChange={this.handleChange} autoFocus/>
+                <div className="title-list">
+                    < Bucket songs={this.state.songs.filter(this.searchFilter)} updateList={this.props.updateList} />
+                </div>
+            </div>
+            )
+        }
+
         return (
             <div> 
                 <div className="song-list">
                     <input className="search" onChange={this.handleChange} autoFocus/>
                     <div className="title-list">
+                        {/* < Bucket songs={this.state.songs} /> */}
                         {this.state.songs.filter(this.searchFilter).map( s =>
-                            <div className="song-title" key={s.id} onClick={()=>this.handleClick(s.id)}>
-                                {s.title}</div>
+                            <div className="song-title" data-selected={s.selected} data-key={s.id} key={s.id} onClick={()=>this.handleClick(s.id)}>
+                            {s.title}</div>
                         )}
                     </div>
                 </div>
                 <div>
-                    { this.state.selectedSong > -1 &&
+                    { this.state.selectedSong > -1 && 
                         <div className="book-display-song">
                             < SongDisplay id={this.state.selectedSong} />
                         </div>
@@ -128,6 +215,4 @@ class SongsList extends Component {
     }
 }
 
-
-
-export default SongsList;
+export default SongsList

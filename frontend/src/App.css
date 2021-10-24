@@ -129,12 +129,14 @@ a {
   text-align: center;
 }
 
-.book-display, .edit-song-form {
+.widescreen {
   width: 50%;
+  padding: 10px;
 }
 
-.book-display-song, .edit-song-display {
-  width: 50%;
+.widescreen-parent {
+  width: 100%;
+  display: flex;
 }
 
 .edit-song-textarea {
@@ -154,4 +156,8 @@ a {
 .song-control-link {
   display: inline;
   padding-right: 20px;
+}
+
+div[data-selected=true] {
+  background-color: red
 }
