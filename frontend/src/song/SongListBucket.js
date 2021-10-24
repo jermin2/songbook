@@ -22,12 +22,13 @@ export const Bucket = (data) => {
                 setBaseCards(data.songs);
             } // don't need to update if it is the same
             else if(base_cards.length === data.songs.length){}
-            
+         // eslint-disable-next-line   
           },[data.songs.length] );
 
           // only update if cards change (due to order changing)
           useEffect( ()=> {
               data.updateList(cards);
+          // eslint-disable-next-line
           }, [cards])
 
         const moveCard = useCallback((dragIndex, hoverIndex) => {
