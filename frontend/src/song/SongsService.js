@@ -9,7 +9,7 @@ export default class SongsService {
     }
 
     getSong(id){
-        const url = `${API_URL}/api/song/${id}`;
+        const url = `${API_URL}/api/song/${id}/`;
         return axios.get(url).then(response => response.data).catch(e => console.log(e));
     }
 

@@ -64,14 +64,18 @@ def edit_book(request, id):
     # Delete all the songs in the book
     book.songs.clear()
 
+    index = 1
+
     for song_id in songs:
         s = Song.objects.get(id=song_id)
         print(s.title)
         BookSongs.objects.create(
             book=book,
             song=s,
-            index=1
+            index=index
         )
+
+        index += 1
     #     book.songs.add(s)
 
     book.save()

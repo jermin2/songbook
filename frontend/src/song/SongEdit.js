@@ -13,7 +13,7 @@ class SongEdit extends Component {
         super(props);
         this.state  = {
             song: {
-                id: 4,
+                id: 7,
                 title: "",
                 text: ""
             }
@@ -26,6 +26,7 @@ class SongEdit extends Component {
 
         if(params && params.id) {
             songService.getSong(params.id).then( result => {
+                console.log(result);
                 this.setState({
                     song: result
                 });
@@ -63,7 +64,7 @@ class SongEdit extends Component {
                 </Form>
                 </div>
                 <div className="edit-song-display widescreen">
-                    < SongDisplay mode="BY_SONG" id={4} song={this.state.song}/>
+                    < SongDisplay mode="BY_SONG" id={this.state.song.id} song={this.state.song}/>
                 </div>
             </div>
             
