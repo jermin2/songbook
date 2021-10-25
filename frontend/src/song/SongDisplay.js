@@ -105,14 +105,16 @@ class SongDisplay extends Component {
 
         var lines = block.split("\n");
 
-        if (block.startsWith("c ") ) {
+        if (block.startsWith("c\n") ) {
             // Remove the "c"
             lines.splice(0,1)
             return (
-                
+                <>
                 <div className="chorus">
                 {lines.map( (line) => this.parseLineType(line) ) }
                 </div>
+                <div class="line">&nbsp;</div>
+                </>
             )
         }
         return(
