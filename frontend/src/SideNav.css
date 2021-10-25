@@ -32,6 +32,7 @@
 
 .nav-item:hover {
     cursor: pointer; 
+    background-color:lightgreen;
 }
 
 .nav-menu {
@@ -46,4 +47,9 @@
 .nav-menu.hidden {
     left: -200px;
     position: fixed;
+}
+
+.login-nav {
+  background-color: gray;
+  color: white;
 }

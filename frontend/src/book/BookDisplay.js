@@ -68,6 +68,14 @@ class BookDisplay extends Component {
         })
     }
 
+    delete(id){
+        var r = window.confirm("This will delete the book - this cannot be reversed");
+        if (r){
+            bookService.deleteBook(this.state.book.id);
+            this.props.history.push('/');
+        }
+    }
+
     render() {
         return (
             <div className="book-display-parent widescreen-parent">
@@ -75,13 +83,13 @@ class BookDisplay extends Component {
                     <h2 className="book-name">{this.state.book.title}</h2>
                     <div className="links-parent">
                     <Link  className="book-control-link" to={`/book/${this.state.book.id}/edit`}>Edit</Link>
-                    <Link  className="book-control-link" to={`/book/${this.state.book.id}/edit`}>Delete</Link>
+                    <button className="control-link" onClick={()=>this.delete(1)}>Delete</button>
                     </div>
                     < SongsList book={this.state.book} mode={'BOOK_LIST'} setId={this.setId}/>
                 </div>
                 { this.state.selectedSong > -1 &&
                     <div className="book-display-song widescreen">
-                        < SongDisplay id={this.state.selectedSong} />
+                        < SongDisplay id={this.state.selectedSong} widescreen="true"/>
                     </div>
                 }
             </div>

@@ -177,7 +177,7 @@ class SongDisplay extends Component {
                         <Link className="control-link" to={`/song/${this.state.song.id}`}>Full Screen</Link>
                     </div>
                     <div>
-                        <div className="song-title">{this.state.song.title}title</div>
+                        <div className="song-display-title">{this.state.song.title}title</div>
                     <div className="song">{this.parseSong()}</div>
                     </div>
                 </div>
@@ -188,7 +188,6 @@ class SongDisplay extends Component {
                 <div>
                     <div className="links-parent">
                         <Link className="control-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
-                        <Link className="control-link" to={`/song/${this.state.song.id}`}>Full Screen</Link>
                     </div>
                     <div className="song-display-title">{this.state.song.title}</div>
                     <div className="song">{this.parseSong()}</div>

@@ -15,7 +15,15 @@ export default class SongsService {
 
     deleteSong(id){
         const url = `${API_URL}/api/song/${id}`;
-        return axios.delete(url);
+        const token = sessionStorage.getItem("token");
+        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
+        return axios.delete(url, headers).then(response => {
+            console.log(response.data);
+            alert("Success");}
+         ).catch(e => {
+            console.log(e);
+            alert("An error occured");
+        });
     }
 
     createSong(song){

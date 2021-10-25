@@ -8,6 +8,11 @@ import SongService from './SongsService'
 
 const songService = new SongService();
 
+const divStyle = {
+    display: 'flex',
+    justifyContent:'space-between'
+  };
+
 class SongEdit extends Component {
     constructor(props){
         super(props);
@@ -64,6 +69,14 @@ class SongEdit extends Component {
         }
     }
 
+    handleDelete(){
+        var r = window.confirm("This will delete the song permanently - this cannot be reversed!");
+        if(r){
+            songService.deleteSong(this.state.song.id);
+            this.props.history.push("/");
+        }
+    }
+
     render() {
         return (
             <div className="edit-song-parent widescreen-parent">
@@ -75,7 +88,10 @@ class SongEdit extends Component {
                     <Form.Group className="mb-3">
                         <Form.Control className="edit-song-textarea" as="textarea" name="text" value={this.state.song.text} onChange={this.handleChange}/>
                     </Form.Group>
+                    <div style={divStyle}>
+                    <Button className="btn-danger" onClick={() => this.handleDelete()}>Delete</Button>
                     <Button onClick={this.handleSave}>Save</Button>
+                    </div>
                 </Form>
                 </div>
                 <div className="edit-song-display widescreen">

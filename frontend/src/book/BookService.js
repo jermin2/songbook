@@ -17,7 +17,13 @@ export default class BookService {
         const url = `${API_URL}/api/book/${id}`;
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-        return axios.delete(url, headers);
+        return axios.delete(url, headers).then(response => {
+            console.log(response.data);
+            alert("Book deleted");}
+         ).catch(e => {
+            console.log(e);
+            alert("An error occured");
+        });
     }
 
     createBook(book){

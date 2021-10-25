@@ -90,6 +90,7 @@ class BookEdit extends Component {
 
     handleClick = () => {
         bookService.updateBook(this.state.book);
+        this.props.history.push(`/book/${this.state.book.id}`);
     }
 
 
