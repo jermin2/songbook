@@ -93,12 +93,36 @@ class SongDisplay extends Component {
 
         // Sanitize the inputs
         var song_text_sanitised = song_text.replace(/(\r\n)|\r|\n/igm, '\n')
-        var lines = song_text_sanitised.split("\n");
+        var blocks = song_text_sanitised.split("\n\n");
         
+        return( <>
+            {blocks.map( (block) => this.parseBlock(block) ) }
+            </>
+        )
+    }
+
+    parseBlock = (block) => {
+
+        var lines = block.split("\n");
+
+        if (block.startsWith("c ") ) {
+            // Remove the "c"
+            lines.splice(0,1)
+            return (
+                
+                <div className="chorus">
+                {lines.map( (line) => this.parseLineType(line) ) }
+                </div>
+            )
+        }
         return(
-            <div className="lines">
+            <>
+            <div className="verse">
             {lines.map( (line) => this.parseLineType(line) ) }
+            
             </div>
+            <div class="line">&nbsp;</div>
+            </>
         )
     }
 

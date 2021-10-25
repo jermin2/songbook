@@ -167,3 +167,7 @@ div[data-selected=true] {
   padding-bottom: 20px;
   font-weight:bold;
 }
+
+.chorus {
+  margin-left: 20px;
+}
