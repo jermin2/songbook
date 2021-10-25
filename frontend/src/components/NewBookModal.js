@@ -18,7 +18,6 @@ export default function NewBookModal(props) {
 
   function handleSave(){
       bookService.createBook({title: title});
-      alert("New Book Added");
       props.toggleShow();
   };
 

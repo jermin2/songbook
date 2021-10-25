@@ -24,9 +24,8 @@ class SongEdit extends Component {
     componentDidMount(){
         const  { match: {params} }  = this.props;
 
-        console.log(this.props);
         if( this.props.match.path === '/song/new'){
-            console.log("new song")
+
             this.setState({
                 mode: 'NEW_SONG',
                 song: {
@@ -39,7 +38,6 @@ class SongEdit extends Component {
         else
         if(params && params.id) {
             songService.getSong(params.id).then( result => {
-                console.log(result);
                 this.setState({
                     song: result
                 });
@@ -59,9 +57,8 @@ class SongEdit extends Component {
     }
 
     handleSave() {
-        console.log("save", this.state.song);
         if(this.state.song.id === -1){
-            songService.createSong(this.state.song)
+            songService.createSong(this.state.song);
         } else {
             songService.updateSong(this.state.song);
         }

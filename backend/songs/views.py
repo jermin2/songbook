@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .serializers import SongSerializer, BookSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import Song, Book, BookSongs
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -15,14 +15,12 @@ from django.shortcuts import HttpResponse
 # Create your views here.
 class SongView(viewsets.ModelViewSet):
     serializer_class = SongSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Song.objects.all()
-
-class BookViewReadOnly(viewsets.ReadOnlyModelViewSet):
-    serializer_class = BookSerializer
-    queryset = Book.objects.all()
 
 class BookView(viewsets.ModelViewSet):
     serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Book.objects.all()
 
 # @authentication_classes([SessionAuthentication, BasicAuthentication])

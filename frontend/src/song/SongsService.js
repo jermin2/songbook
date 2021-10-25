@@ -20,18 +20,29 @@ export default class SongsService {
 
     createSong(song){
         const url = `${API_URL}/api/song/`;
-        return axios.post(url,song).then(response => response.data);
+        const token = sessionStorage.getItem("token");
+        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
+        return axios.post(url,song, headers).then(response => {
+            console.log(response.data);
+            alert("Success");}
+         ).catch(e => {
+            console.log(e);
+            alert("An error occured");
+        })
     }
 
     updateSong(song){
         const url = `${API_URL}/api/song/${song.id}/edit`;
         const token = sessionStorage.getItem("token");
-        return axios.put(url, song, {
-            headers: { "Authorization": `Bearer ${token}` },
-            
-        }).then(response => {
-            console.log(response.data)
-        })
+        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
+
+        return axios.put(url, song, headers).then(response => {
+                console.log(response.data);
+                alert("Success");}
+             ).catch(e => {
+                console.log(e);
+                alert("An error occured");
+            })
     }
 
 }

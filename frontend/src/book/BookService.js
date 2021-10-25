@@ -14,23 +14,36 @@ export default class BookService {
     }
 
     deleteBook(id){
-        const url = `${API_URL}/api/edit/book/${id}`;
-        return axios.delete(url);
+        const url = `${API_URL}/api/book/${id}`;
+        const token = sessionStorage.getItem("token");
+        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
+        return axios.delete(url, headers);
     }
 
     createBook(book){
-        const url = `${API_URL}/api/edit/book/`;
-        return axios.post(url,book).then(response => response.data);
+        const url = `${API_URL}/api/book/`;
+        const token = sessionStorage.getItem("token");
+        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
+        return axios.post(url,book, headers).then(response => {
+            console.log(response.data);
+            alert("Success");}
+         ).catch(e => {
+            console.log(e);
+            alert("An error occured");
+        })
+
     }
 
     updateBook(book){
-        const url = `${API_URL}/api/edit/book/${book.id}/edit`;
+        const url = `${API_URL}/api/book/${book.id}/edit`;
         const token = sessionStorage.getItem("token");
-        return axios.put(url, book, {
-            headers: { "Authorization": `Bearer ${token}` },
-            
-        }).then(response => {
-            console.log(response.data)
+        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
+        return axios.put(url,book, headers).then(response => {
+            console.log(response.data);
+            alert("Success");}
+         ).catch(e => {
+            console.log(e);
+            alert("An error occured");
         })
     }
 }
