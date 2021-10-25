@@ -13,7 +13,7 @@ class SongEdit extends Component {
         super(props);
         this.state  = {
             song: {
-                id: 7,
+                id: -1,
                 title: "",
                 text: ""
             }
@@ -24,6 +24,19 @@ class SongEdit extends Component {
     componentDidMount(){
         const  { match: {params} }  = this.props;
 
+        console.log(this.props);
+        if( this.props.match.path === '/song/new'){
+            console.log("new song")
+            this.setState({
+                mode: 'NEW_SONG',
+                song: {
+                    id: -1,
+                    title: "Title here",
+                    text: "text here"
+                }
+            })
+        }
+        else
         if(params && params.id) {
             songService.getSong(params.id).then( result => {
                 console.log(result);
@@ -42,11 +55,16 @@ class SongEdit extends Component {
         this.setState({
             song:activeSong
         })
+ 
     }
 
     handleSave() {
         console.log("save", this.state.song);
-        songService.updateSong(this.state.song);
+        if(this.state.song.id === -1){
+            songService.createSong(this.state.song)
+        } else {
+            songService.updateSong(this.state.song);
+        }
     }
 
     render() {

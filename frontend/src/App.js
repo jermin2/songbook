@@ -59,7 +59,7 @@ class App extends Component {
       <DndProvider backend={HTML5Backend}>
       <BrowserRouter>
       <div className="main">
-        <SideNav toggleLogin={this.toggleLogin} />
+        <SideNav toggleLogin={this.toggleLogin}/>
         <div className="app">
           <h1 className="title"><Link to="/">Song Book</Link></h1>
 
@@ -67,8 +67,10 @@ class App extends Component {
             <Route path="/" exact component={SongsList} />
             <Route path="/song/:id/edit" component={SongEdit} />
             <Route path="/book/:id/edit"  component={BookEdit} />
+            <Route path="/add/song" exact component={SongEdit} />
             <Route path="/song/:id" exact component={SongDisplay} />
             <Route path="/book/:id" exact component={BookDisplay} />
+
           </div>
         </div>
       </div>

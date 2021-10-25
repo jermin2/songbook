@@ -50,22 +50,28 @@ class SongDisplay extends Component {
         
     }
 
-    componentDidUpdate(){
+    componentDidUpdate(prevProps){
 
+        // No need to load a song, the song is given directly
         if (this.props.mode && this.props.mode === "BY_SONG") {
             
-            if (this.state.song.id === this.props.song.id){
+            // if the song didn't change, no need to udpate
+            if(prevProps === this.props){
                 return
             }
-            return this.setState({
+            // return 
+            this.setState({
                 song: this.props.song
             })
+            return;
         }
 
+        // load a song from memory
         const id = this.props.id;
         if( id ){
             return this.getSong(id);
         }
+        // load a song via URL
         else {
             // Handle URL
             const { match: { params } } =  this.props;
@@ -148,7 +154,10 @@ class SongDisplay extends Component {
                             <Link className="song-link" to={`/song/${this.state.song.id}`}>Full Screen</Link>
                         </div>
                     </div>
+                    <div>
+                        <div className="song-title">{this.state.song.title}title</div>
                     <div className="song">{this.parseSong()}</div>
+                    </div>
                 </div>
             )
         }
@@ -160,6 +169,7 @@ class SongDisplay extends Component {
                             <Link className="song-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
                         </div>
                     </div>
+                    <div className="song-title">{this.state.song.title}</div>
                     <div className="song">{this.parseSong()}</div>
                 </div>
             )

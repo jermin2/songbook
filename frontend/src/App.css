@@ -161,3 +161,9 @@ a {
 div[data-selected=true] {
   background-color: red
 }
+
+.song-title {
+  text-align: center;
+  padding-bottom: 20px;
+  font-weight:bold;
+}

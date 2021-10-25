@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import HamburgerMenu from 'react-hamburger-menu'
 import BookList from './book/BookList'
 
+import {withRouter} from 'react-router-dom'
+
 import './SideNav.css';
 
 class SideNav extends Component {
@@ -13,6 +15,7 @@ class SideNav extends Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.toggleSideNav = this.toggleSideNav.bind(this);
+        this.addSong = this.addSong.bind(this);
     }
 
     handleClick() {
@@ -25,6 +28,11 @@ class SideNav extends Component {
         this.setState({
             isOpen: !this.state.isOpen
         })
+    }
+
+    addSong() {
+        console.log(this.props);
+        this.props.history.push('/add/song');
     }
 
     render() {
@@ -46,7 +54,7 @@ class SideNav extends Component {
                 </div>
                 <div className={this.state.isOpen ? "nav-menu" : "nav-menu hidden"}>
                     <div className="nav-item" onClick={ ()=> this.props.toggleLogin()}>Login</div>
-                    
+                    <div className="nav-item" onClick={ ()=> this.addSong()}>New Song</div>
                     <div className="nav-item">Books</div>
                     < BookList toggleSideNav={this.toggleSideNav}/>
                 </div>
@@ -56,4 +64,4 @@ class SideNav extends Component {
     }
 }
 
-export default SideNav
+export default withRouter(SideNav)
