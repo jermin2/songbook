@@ -177,3 +177,18 @@ div[data-selected=true] {
 .chorus {
   margin-left: 20px;
 }
+
+.book-control-link, .control-link {
+  margin-right: 20px;
+  display: inline-block;
+  background-color:lightgray;
+  padding:5px;
+  border-radius:5px;
+
+}
+
+.links-parent {
+  display:flex;
+  justify-content: center;
+  padding-bottom: 15px;
+}

@@ -5,6 +5,8 @@ import BookService from './BookService'
 import SongsList from '../song/SongsList'
 
 
+
+
 const bookService = new BookService()
 
 class BookEdit extends Component {
@@ -97,10 +99,13 @@ class BookEdit extends Component {
             <div className="book-edit-parent widescreen-parent">
                 <div className="book-edit widescreen">
                     <h2 className="book-name ">{this.state.book.title}</h2>
-                    <button className="btn btn-primary" onClick={this.handleClick}>Save</button>
+                    <div className="links-parent">
+                     <button className="control-link" onClick={this.handleClick}>Save</button>
+                    </div>
                     < SongsList book={this.state.book} mode={'BOOK_EDIT'} updateList={this.updateList}/>
                 </div>
                 <div className="book-edit-songlist widescreen">
+                    <h2 className="book-name">All songs</h2>
                     < SongsList showSong={false} setId={this.setId} mode={'BOOK_EDIT_SELECT'} selected={this.state.book.songs}/>
                 </div>
             </div>

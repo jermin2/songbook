@@ -183,7 +183,7 @@ class SongsList extends Component {
         if(this.state.mode === 'BOOK_EDIT') {
             return(
             <div className="song-list">
-                <input className="search" onChange={this.handleChange} autoFocus/>
+                <input className="search" onChange={this.handleChange} autoFocus placeholder="Type to search"/>
                 <div className="title-list">
                     < Bucket songs={this.state.songs.filter(this.searchFilter)} updateList={this.props.updateList} />
                 </div>
@@ -194,9 +194,8 @@ class SongsList extends Component {
         return (
             <div> 
                 <div className="song-list">
-                    <input className="search" onChange={this.handleChange} autoFocus/>
+                    <input className="search" onChange={this.handleChange} autoFocus placeholder="Type to search"/>
                     <div className="title-list">
-                        {/* < Bucket songs={this.state.songs} /> */}
                         {this.state.songs.filter(this.searchFilter).map( s =>
                             <div className="song-title" data-selected={s.selected} data-key={s.id} key={s.id} onClick={()=>this.handleClick(s.id)}>
                             {s.title}</div>

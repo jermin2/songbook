@@ -5,6 +5,8 @@ import BookService from './BookService'
 import SongsList from '../song/SongsList'
 import SongDisplay from '../song/SongDisplay'
 
+import { Link } from 'react-router-dom'
+
 
 const bookService = new BookService()
 
@@ -71,6 +73,10 @@ class BookDisplay extends Component {
             <div className="book-display-parent widescreen-parent">
                 <div className="book-display widescreen">
                     <h2 className="book-name">{this.state.book.title}</h2>
+                    <div className="links-parent">
+                    <Link  className="book-control-link" to={`/book/${this.state.book.id}/edit`}>Edit</Link>
+                    <Link  className="book-control-link" to={`/book/${this.state.book.id}/edit`}>Delete</Link>
+                    </div>
                     < SongsList book={this.state.book} mode={'BOOK_LIST'} setId={this.setId}/>
                 </div>
                 { this.state.selectedSong > -1 &&
