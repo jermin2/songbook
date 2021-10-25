@@ -81,15 +81,17 @@ class BookDisplay extends Component {
             <div className="book-display-parent widescreen-parent">
                 <div className="book-display widescreen">
                     <h2 className="book-name">{this.state.book.title}</h2>
+                    {this.props.userLoggedIn && 
                     <div className="links-parent">
-                    <Link  className="book-control-link" to={`/book/${this.state.book.id}/edit`}>Edit</Link>
-                    <button className="control-link" onClick={()=>this.delete(1)}>Delete</button>
+                        <Link  className="book-control-link" to={`/book/${this.state.book.id}/edit`}>Edit</Link>
+                        <button className="control-link" onClick={()=>this.delete(1)}>Delete</button>
                     </div>
+                    }
                     < SongsList book={this.state.book} mode={'BOOK_LIST'} setId={this.setId}/>
                 </div>
                 { this.state.selectedSong > -1 &&
                     <div className="book-display-song widescreen">
-                        < SongDisplay id={this.state.selectedSong} widescreen="true"/>
+                        < SongDisplay id={this.state.selectedSong} widescreen="true" userLoggedIn={this.props.userLoggedIn}/>
                     </div>
                 }
             </div>

@@ -58,8 +58,11 @@ class SideNav extends Component {
                     :
                     <div className="nav-item login-nav" onClick={ ()=> this.props.toggleLogin()}>Login</div>
                     }
+                    { this.props.userLoggedIn ? <>
                     <div className="nav-item" onClick={ ()=> this.addSong()}>New Song</div>
                     <div className="nav-item" onClick={this.props.newBook}>New Book</div>
+                    </>
+                    : <></>}
                     <div className="nav-item">Books</div>
                     
                     < BookList toggleSideNav={this.toggleSideNav}/>

@@ -173,7 +173,9 @@ class SongDisplay extends Component {
             return (
                 <div>
                     <div className="links-parent">
+                        {this.props.userLoggedIn && 
                         <Link className="control-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
+                        }
                         <Link className="control-link" to={`/song/${this.state.song.id}`}>Full Screen</Link>
                     </div>
                     <div>
@@ -186,9 +188,11 @@ class SongDisplay extends Component {
         else {
             return(
                 <div>
+                    {this.props.userLoggedIn && 
                     <div className="links-parent">
                         <Link className="control-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
                     </div>
+                    }
                     <div className="song-display-title">{this.state.song.title}</div>
                     <div className="song">{this.parseSong()}</div>
                 </div>

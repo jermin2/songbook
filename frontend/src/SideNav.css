@@ -41,7 +41,7 @@
     width: 200px;
     background-color:lightgray;
     height: 100vh;
-    z-index: 10
+    z-index: 10;
 }
 
 .nav-menu.hidden {
