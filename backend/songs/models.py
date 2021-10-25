@@ -10,7 +10,7 @@ class Song(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    year = models.IntegerField(blank=True)
+    year = models.IntegerField(null=True, blank=True)
     songs = models.ManyToManyField(Song, related_name="books", through="BookSongs")
 
     def _str_(self):
@@ -19,8 +19,8 @@ class Book(models.Model):
 class BookSongs(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    index = models.IntegerField(blank=True)
-    variant = models.TextField(blank=True)
+    index = models.IntegerField(null=True,blank=True)
+    variant = models.TextField(null=True, blank=True)
 
     class Meta:
         constraints = [

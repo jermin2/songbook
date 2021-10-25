@@ -113,7 +113,7 @@ class SongDisplay extends Component {
                 <div className="chorus">
                 {lines.map( (line) => this.parseLineType(line) ) }
                 </div>
-                <div class="line">&nbsp;</div>
+                <div className="line">&nbsp;</div>
                 </>
             )
         }
@@ -123,7 +123,7 @@ class SongDisplay extends Component {
             {lines.map( (line) => this.parseLineType(line) ) }
             
             </div>
-            <div class="line">&nbsp;</div>
+            <div className="line">&nbsp;</div>
             </>
         )
     }
@@ -195,7 +195,7 @@ class SongDisplay extends Component {
                             <Link className="song-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
                         </div>
                     </div>
-                    <div className="song-title">{this.state.song.title}</div>
+                    <div className="song-display-title">{this.state.song.title}</div>
                     <div className="song">{this.parseSong()}</div>
                 </div>
             )

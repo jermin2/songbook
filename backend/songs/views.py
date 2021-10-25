@@ -17,7 +17,11 @@ class SongView(viewsets.ModelViewSet):
     serializer_class = SongSerializer
     queryset = Song.objects.all()
 
-class BookView(viewsets.ReadOnlyModelViewSet):
+class BookViewReadOnly(viewsets.ReadOnlyModelViewSet):
+    serializer_class = BookSerializer
+    queryset = Book.objects.all()
+
+class BookView(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     queryset = Book.objects.all()
 

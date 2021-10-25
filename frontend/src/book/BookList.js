@@ -33,6 +33,24 @@ class BookList extends Component {
         
     }
 
+    async componentDidUpdate() {
+        var self = this;
+
+        bookService.getBooks().then(function (result) {
+
+            if (self.state.books.length !== result.length){
+                result = result.sort( (s1, s2) => {
+                    if (s1.title > s2.title) { return 1; }
+                    else if (s2.title > s1.title){ return -1; }
+                    else return 0;
+                });
+                self.setState({
+                    books: result
+                })
+            }
+        })        
+    }
+
     handleDelete(e, id){
         bookService.deleteBook( {id: id}).then( () => {
             var newArr = this.state.books.filter( (s)=> {return s.id !== id;} );
@@ -54,7 +72,7 @@ class BookList extends Component {
         return (
                 <div className="book-list">
                     {this.state.books.map( b =>
-                        <div className="book-title" key={b.id} onClick={ () => this.handleClick(b.id)}>{b.title}</div>
+                        <div className="book-list-title" key={b.id} onClick={ () => this.handleClick(b.id)}>{b.title}</div>
                     )}
                 </div>
         );

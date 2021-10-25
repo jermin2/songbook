@@ -14,17 +14,17 @@ export default class BookService {
     }
 
     deleteBook(id){
-        const url = `${API_URL}/api/book/${id}`;
+        const url = `${API_URL}/api/edit/book/${id}`;
         return axios.delete(url);
     }
 
     createBook(book){
-        const url = `${API_URL}/api/book/`;
+        const url = `${API_URL}/api/edit/book/`;
         return axios.post(url,book).then(response => response.data);
     }
 
     updateBook(book){
-        const url = `${API_URL}/api/book/${book.id}/edit`;
+        const url = `${API_URL}/api/edit/book/${book.id}/edit`;
         const token = sessionStorage.getItem("token");
         return axios.put(url, book, {
             headers: { "Authorization": `Bearer ${token}` },

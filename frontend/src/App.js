@@ -15,6 +15,7 @@ import LoginModal from "react-login-modal";
 
 import Modal from 'react-bootstrap/Modal';
 
+import NewBookModal from './components/NewBookModal'
 import SideNav from './SideNav'
 import './App.css';
 
@@ -26,14 +27,23 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      showLogin: false
+      showLogin: false,
+      userLoggedIn: false,
+      showNewBook: false,
     }
 
     this.toggleLogin = this.toggleLogin.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.toggleShowNewBook = this.toggleShowNewBook.bind(this);
+    
   }
 
-  
+  toggleShowNewBook() {
+    this.setState({
+      showNewBook: !this.state.showNewBook
+    })
+  }
 
   toggleLogin() {
     this.setState({
@@ -43,14 +53,23 @@ class App extends Component {
 
   handleLogin(username, password){
     if( authService.login(username, password) ){
+      alert("User Logged In");
       this.setState({
-        showLogin: false
+        showLogin: false,
+        userLoggedIn: true
       })
+
     }
 
   }
-  logout(){
-    authService.logout()
+  handleLogout(){
+    authService.logout();
+    this.setState({
+      userLoggedIn: false,
+      showLogin: false,
+    })
+    alert('User Logged Out');
+
   }
   render() {
 
@@ -59,7 +78,11 @@ class App extends Component {
       <DndProvider backend={HTML5Backend}>
       <BrowserRouter>
       <div className="main">
-        <SideNav toggleLogin={this.toggleLogin}/>
+        <SideNav 
+          toggleLogin={this.toggleLogin} 
+          handleLogout={this.handleLogout} 
+          userLoggedIn={this.state.userLoggedIn} 
+          newBook={this.toggleShowNewBook}/>
         <div className="app">
           <h1 className="title"><Link to="/">Song Book</Link></h1>
 
@@ -88,6 +111,7 @@ class App extends Component {
         />
         <button onClick={this.toggleLogin}>Close</button>
       </Modal>
+      <NewBookModal show={this.state.showNewBook} toggleShow={this.toggleShowNewBook}/>
       </BrowserRouter>
       </DndProvider>
     )

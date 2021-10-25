@@ -117,6 +117,12 @@ a {
   padding: 10px;
 }
 
+.book-list-title{
+  text-align: left;
+  padding: 10px;
+  padding-left: 20px;
+}
+
 .book-display-parent, .edit-song-parent {
   display: flex;
   width: 100%;
@@ -162,7 +168,7 @@ div[data-selected=true] {
   background-color: red
 }
 
-.song-title {
+.song-display-title {
   text-align: center;
   padding-bottom: 20px;
   font-weight:bold;
