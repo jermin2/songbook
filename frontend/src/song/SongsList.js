@@ -1,13 +1,10 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import SongsService from './SongsService';
 import {Bucket} from './SongListBucket'
-import SongDisplay from './SongDisplay'
-import BookService from '../book/BookService';
 
 import SongHelper from './SongHelper'
 
 const songsService = new SongsService();
-const bookService = new BookService();
 
 const songHelper = new SongHelper();
 
@@ -23,23 +20,20 @@ export const SongsList = (data) => {
     const [filtered, setFiltered] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [mode, setMode] = useState("");
-    const [selectedSong, setSelectedSong] = useState(-1);
   
+    // If we change mode to BOOK_EDIT_SELECT or SONG_LIST
+    useEffect( () => {
+        // If we are in BOOK_EDIT_SELECT MODE and no songs
+        if(mode===BOOK_EDIT_SELECT || mode===SONG_LIST){
+            if(!songs || songs.length===0){
+                songsService.getSongs().then( result => {
+                    console.log("set songs", result);
+                    setSongs(result);
+                });
+            }  
+        }
+    },[mode, songs])
 
-    function getSongs(){
-        songsService.getSongs().then( result => {
-            console.log("set songs", result);
-            setSongs(result);
-        });
-    }
-
-    // If we are in BOOK_EDIT_SELECT MODE and no songs
-    if(mode===BOOK_EDIT_SELECT || mode===SONG_LIST){
-        if(!songs || songs.length===0){
-            console.log(mode);
-            getSongs();
-        }  
-    }
 
     // Change modes
     useEffect( () => {
@@ -64,6 +58,7 @@ export const SongsList = (data) => {
             console.log("songs changed", songList );
             setSongs(songList);
         }
+    // eslint-disable-next-line
     },[data.book]);
 
     // What to do if the selected songs in the book changes..for mode = BOOK_EDIT_SELECT
@@ -81,7 +76,8 @@ export const SongsList = (data) => {
         
         setSongs(newSongList);
 
-    },[data.selected]);
+        // eslint-disable-next-line
+    },[data.selected, mode]);
 
     // Filter
     useEffect( () => {
@@ -99,16 +95,8 @@ export const SongsList = (data) => {
 
         const l = songs.filter(searchFilter);
         setFiltered(l);
-
+        // eslint-disable-next-line
     },[songs, searchTerm])
-
-    function handleDelete(e, id) {
-        songsService.deleteSong( {id:id} ).then( () => {
-            //Remove the song from the array
-            var newArr = songs.filter( (s) => {return s.song_id !== id} );
-            setSongs(newArr);
-        })
-    };
 
     function handleClick(id) {
         console.log(mode, id, songs);
@@ -170,53 +158,37 @@ export const SongsList = (data) => {
         }     
     };
 
-    function render() {
-        // if(mode==='BOOK_EDIT') console.log(mode, data);
-        
-        if(mode === 'BOOK_EDIT') {
-
-            console.log("book-edit songs", songs);
-            return(
-            <div className="song-list">
-                <input className="search" onChange={handleChange()} autoFocus placeholder="Type to search"/>
-                <div className="title-list">
-                    <Bucket songs={filtered} updateList={data.updateList} />
-                </div>
-            </div>
-            )
-        }
-
-        return (
-            <div> 
-                <div className="song-list">
-                    <input className="search" onChange={handleChange} autoFocus placeholder="Type to search"/>
-                    <div className="title-list">
-                        {filtered.map( s =>
-                            <div className="song-item" data-selected={s.selected} data-key={s.song_id} key={s.id ? s.id : s.song_id} onClick={() => handleClick(s.song_id)}>
-                           
-                           { s.index && <div className="song-index">#{s.index}</div>} 
-                           { s.book_title && <div className="song-book-info"> {s.book_title}</div>}
-                           <div className="song-title">{s.title}</div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <div>
-                    {/* Used during book edit (this is the right hand side) */}
-                    {selectedSong > -1 && 
-                        <div className="book-display-song">
-                            < SongDisplay id={selectedSong} />
-                        </div>
-                    }
-                </div>
-            </div>
-        );
-    };
     if (!songs || songs.length===0){
-        // console.log("apparently no songs?", songs)
-        // getSongs();
-        // console.log("no songs at all??", data)
         return <>NO SONGS</>
-    } else
-    return (<> {render()} </>)
+    }
+    if(mode === 'BOOK_EDIT') {
+
+        return(
+        <div className="song-list">
+            <input className="search" onChange={handleChange()} autoFocus placeholder="Type to search"/>
+            <div className="title-list">
+                <Bucket songs={filtered} updateList={data.updateList} />
+            </div>
+        </div>
+        )
+    }
+    // For all other modes, return this
+    return (      
+        <div> 
+            <div className="song-list">
+                <input className="search" onChange={handleChange} autoFocus placeholder="Type to search"/>
+                <div className="title-list">
+                    {filtered.map( s =>
+                        <div className="song-item" data-selected={s.selected} data-key={s.song_id} key={s.id ? s.id : s.song_id} onClick={() => handleClick(s.song_id)}>
+                       
+                       { s.index && <div className="song-index">#{s.index}</div>} 
+                       { s.book_title && <div className="song-book-info"> {s.book_title}</div>}
+                       <div className="song-title">{s.title}</div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+
 };

@@ -113,22 +113,22 @@ class SongDisplay extends Component {
             // Remove the "c"
             lines.splice(0,1)
             return (
-                <>
-                <div className="chorus">
+                <div key={`b${block}`}>
+                <div className="chorus" key={`c${block}`}>
                 {lines.map( (line) => this.parseLineType(line) ) }
                 </div>
-                <div className="line">&nbsp;</div>
-                </>
+                <div className="line" key={`g${block}`}>&nbsp;</div>
+                </div>
             )
         }
         return(
-            <>
-            <div className="verse">
+            <div key={`b${block}`}>
+            <div className="verse" key={`v${block}`}>
             {lines.map( (line) => this.parseLineType(line) ) }
             
             </div>
-            <div className="line">&nbsp;</div>
-            </>
+            <div className="line" key={`g${block}`}>&nbsp;</div>
+            </div>
         )
     }
 
@@ -174,7 +174,7 @@ class SongDisplay extends Component {
     render() {
         console.log(this.props);
         if(this.props.widescreen){
-            
+            console.log("return a")
             return (
                 <div>
                     <div className="links-parent">
@@ -191,6 +191,7 @@ class SongDisplay extends Component {
             )
         }
         else {
+            console.log('return b')
             return(
                 <div>
                     {this.props.userLoggedIn && 

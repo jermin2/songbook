@@ -1,1 +1,3 @@
 backend/db.sqlite3
+frontend/src/song/SongListOld.js
+frontend/src/book/bookeditold

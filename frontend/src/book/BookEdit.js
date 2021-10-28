@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import BookService from './BookService'
 
@@ -18,6 +18,7 @@ export const BookEdit = (data) => {
                 setBook(result);
             })
         }
+    // eslint-disable-next-line
     },[data.match.params]);
 
     function handleClick() {
@@ -39,7 +40,7 @@ export const BookEdit = (data) => {
         // the id of the book that was selected / deselected
         var songList = [];
         // if the id was found
-        if (book.songs.some( e=> e.song_id == id) ) {
+        if (book.songs.some( e=> e.song_id === id) ) {
             //remove it
             // console.log("setid", "remove");
             songList = book.songs.filter( e => e.song_id !== id );
@@ -49,13 +50,8 @@ export const BookEdit = (data) => {
         }
         const newbook =  {...book, songs:songList}
         setBook(newbook)
-
-        
-        
-
     }
 
-    console.log(book, data);
     //if book doesn't exist
     if(!book.songs) {
         console.log ("no such book");
