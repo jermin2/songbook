@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Song(models.Model):
+    song_id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=100)
     text = models.TextField()
 
@@ -9,6 +10,7 @@ class Song(models.Model):
         return self.title
 
 class Book(models.Model):
+    book_id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=100)
     year = models.IntegerField(null=True,blank=True)
     songs = models.ManyToManyField(Song, related_name="books", through="BookSongs")

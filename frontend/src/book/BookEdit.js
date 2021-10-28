@@ -1,118 +1,81 @@
-import React, { Component } from 'react'
+import { useState, useCallback, useEffect } from 'react';
 
 import BookService from './BookService'
 
-import SongsList from '../song/SongsList'
-
-
-
+import {SongsList} from '../song/SongsList'
 
 const bookService = new BookService()
 
-class BookEdit extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            book: {
-                id: -1,
-                title: "",
-                songs: [],
-            },
-            widescreen: true,
-            selectedSong: -1
-        }
+export const BookEdit = (data) => {
+    const [book, setBook] = useState({});
 
-        this.setId = this.setId.bind(this);
-        this.updateList = this.updateList.bind(this);
-    }
+    useEffect( () => {
 
-    componentDidMount() {
-        const { match: {params} } = this.props;
+        // Handle URL request
+        const { match: {params} } = data;
         if(params && params.id) {
-            //Fetch the new book
-            var self = this;
             bookService.getBook(params.id).then(function(result) {
-                self.setState({
-                    book: result
-                })
+                setBook(result);
             })
         }
+    },[data.match.params]);
+
+    function handleClick() {
+        bookService.updateBook(book);
+        data.history.push(`/book/${book.book_id}`);
     }
 
+    function updateSongOrder(newList){
+        if(!newList || newList.length===0) return;
+        console.log("update song order TODO", newList)
+        const newbook =  {...book, songs:newList}
+        setBook(newbook)
+    }
 
-    componentDidUpdate(preProps, prevState) {
+    // Callback function used by SongList to indicate a selection of a song
+    function setId(id) {
         
-        //Check we have a valid book input
-        const { match: {params} } = this.props;
-        if(params && params.id) {
-
-            //Check it is a different book than what we already have
-            if (parseInt(params.id) !== this.state.book.id) {
-                var self = this;
-                console.log("fetch new book");
-                //Fetch the new book
-                bookService.getBook(params.id).then(function(result) {
-                    self.setState({
-                        book: result,
-                        selectedSong: result.songs[0]
-                    })
-                })
-            }
+        // console.log(id, book.songs);
+        // the id of the book that was selected / deselected
+        var songList = [];
+        // if the id was found
+        if (book.songs.some( e=> e.song_id == id) ) {
+            //remove it
+            // console.log("setid", "remove");
+            songList = book.songs.filter( e => e.song_id !== id );
+        }else {
+            songList = [...book.songs,{song_id: id}]
+            // console.log("setid", "add", songList);
         }
+        const newbook =  {...book, songs:songList}
+        setBook(newbook)
+
+        
+        
+
     }
 
-    // Callback function used by songlist to indicate a selection of a song
-    setId(id){
-        // the id of the book needs to be passed into the bucket
-        //check if id exists. if it does, remove it otherwise add it
-        const songs = this.state.book.songs;
-        const newlist = songs.includes(id) ? songs.filter(e => e !== id) : [...songs,id];
-
-        if (newlist.length > 0) {
-            this.setState({
-                book: {...this.state.book, songs: newlist }
-            })
-        }
+    console.log(book, data);
+    //if book doesn't exist
+    if(!book.songs) {
+        console.log ("no such book");
+        return <div>No such book</div>
     }
-
-    // Callback from the drag and drop list
-    updateList(list){
-        // Flatten the songs since we only want the ids
-        const newList = list.flatMap( e => e.id)
-
-        // Only change the state if the length is > 0 - WARNING, removing this will break the program
-        if (newList.length > 0) {
-            this.setState({
-                book: {...this.state.book, songs: newList }
-            })
-        }
-    }
-
-    handleClick = () => {
-        bookService.updateBook(this.state.book);
-        this.props.history.push(`/book/${this.state.book.id}`);
-    }
-
-
-    render() {
-        return (
+    return (
             
-            <div className="book-edit-parent widescreen-parent">
-                <div className="book-edit widescreen">
-                    <h2 className="book-name ">{this.state.book.title}</h2>
-                    <div className="links-parent">
-                     <button className="control-link" onClick={this.handleClick}>Save</button>
-                    </div>
-                    < SongsList book={this.state.book} mode={'BOOK_EDIT'} updateList={this.updateList}/>
+        <div className="book-edit-parent widescreen-parent">
+            <div className="book-edit widescreen">
+                <h2 className="book-name ">{book.title}</h2>
+                <div className="links-parent">
+                 <button className="control-link" onClick={()=>handleClick()}>Save</button>
                 </div>
-                <div className="book-edit-songlist widescreen">
-                    <h2 className="book-name">All songs</h2>
-                    < SongsList showSong={false} setId={this.setId} mode={'BOOK_EDIT_SELECT'} selected={this.state.book.songs}/>
-                </div>
+                < SongsList book={book} mode={'BOOK_EDIT'} updateList={updateSongOrder}/>
             </div>
+            <div className="book-edit-songlist widescreen">
+                <h2 className="book-name">All songs</h2>
+                < SongsList showSong={false} setId={setId} mode={'BOOK_EDIT_SELECT'} selected={book.songs}/>
+            </div>
+        </div>
 
-        )
-    }
+    )
 }
-
-export default BookEdit

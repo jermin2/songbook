@@ -29,6 +29,7 @@ from rest_framework_simplejwt.views import (
 router = routers.DefaultRouter()
 router.register(r'song', views.SongView, 'song')
 router.register(r'book', views.BookView, 'book')
+router.register(r'booksongs', views.BookSongsView, 'booksongs')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import BookService from './BookService'
 
-import SongsList from '../song/SongsList'
+import {SongsList} from '../song/SongsList'
 import SongDisplay from '../song/SongDisplay'
 
 import { Link } from 'react-router-dom'
@@ -47,14 +47,15 @@ class BookDisplay extends Component {
         if(params && params.id) {
 
             //Check it is a different book than what we already have
-            if (parseInt(params.id) !== this.state.book.id) {
+            if (parseInt(params.id) !== this.state.book.book_id) {
+                console.log(this.state.book.book_id);
                 var self = this;
 
                 //Fetch the new book
                 bookService.getBook(params.id).then(function(result) {
                     self.setState({
                         book: result,
-                        selectedSong: result.songs[0]
+                        selectedSong: -1
                     })
                 })
             }
@@ -63,6 +64,7 @@ class BookDisplay extends Component {
 
     // Callback function used by songlist to indicate a selection of a song
     setId(id){
+        console.log("book display",id);
         this.setState({
             selectedSong: id
         })
@@ -71,7 +73,7 @@ class BookDisplay extends Component {
     delete(id){
         var r = window.confirm("This will delete the book - this cannot be reversed");
         if (r){
-            bookService.deleteBook(this.state.book.id);
+            bookService.deleteBook(this.state.book.book_id);
             this.props.history.push('/');
         }
     }
@@ -83,8 +85,8 @@ class BookDisplay extends Component {
                     <h2 className="book-name">{this.state.book.title}</h2>
                     {this.props.userLoggedIn && 
                     <div className="links-parent">
-                        <Link  className="book-control-link" to={`/book/${this.state.book.id}/edit`}>Edit</Link>
-                        <button className="control-link" onClick={()=>this.delete(1)}>Delete</button>
+                        <Link  className="book-control-link" to={`/book/${this.state.book.book_id}/edit`}>Edit</Link>
+                        <button className="control-link" onClick={()=>this.delete(this.state.book.book_id)}>Delete</button>
                     </div>
                     }
                     < SongsList book={this.state.book} mode={'BOOK_LIST'} setId={this.setId}/>

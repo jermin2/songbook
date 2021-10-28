@@ -67,6 +67,6 @@ export const Card = ({ id, text, index, moveCard }) => {
     const opacity = isDragging ? 0 : 1;
     drag(drop(ref));
     return (<div ref={ref} style={{ ...style, opacity }} data-handler-id={handlerId}>
-			{text}
+			#{index+1}: {text} 
 		</div>);
 };

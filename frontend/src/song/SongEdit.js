@@ -62,7 +62,7 @@ class SongEdit extends Component {
     }
 
     handleSave() {
-        if(this.state.song.id === -1){
+        if(this.state.song.song_id === -1){
             songService.createSong(this.state.song);
         } else {
             songService.updateSong(this.state.song);
@@ -72,7 +72,7 @@ class SongEdit extends Component {
     handleDelete(){
         var r = window.confirm("This will delete the song permanently - this cannot be reversed!");
         if(r){
-            songService.deleteSong(this.state.song.id);
+            songService.deleteSong(this.state.song.song_id);
             this.props.history.push("/");
         }
     }
@@ -95,7 +95,7 @@ class SongEdit extends Component {
                 </Form>
                 </div>
                 <div className="edit-song-display widescreen">
-                    < SongDisplay mode="BY_SONG" id={this.state.song.id} song={this.state.song}/>
+                    < SongDisplay mode="BY_SONG" id={this.state.song.song_id} song={this.state.song}/>
                 </div>
             </div>
             

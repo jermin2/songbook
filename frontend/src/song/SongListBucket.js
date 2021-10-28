@@ -27,6 +27,11 @@ export const Bucket = (data) => {
 
           // only update if cards change (due to order changing)
           useEffect( ()=> {
+              var ind = 0;
+              cards.forEach( card => {
+                card.index = ind;
+                ind++;
+              })
               data.updateList(cards);
           // eslint-disable-next-line
           }, [cards])

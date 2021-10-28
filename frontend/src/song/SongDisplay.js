@@ -26,6 +26,10 @@ class SongDisplay extends Component {
             return this.getSong(id);
         }
         else {
+            
+            // if params are also invalid return nothing
+            if( !this.props.match ) return;
+
             // Handle URL
             const { match: { params } } =  this.props;
             if (params && params.id){
@@ -40,7 +44,7 @@ class SongDisplay extends Component {
     }
 
     getSong(id){
-        if(parseInt(this.state.song.id) === parseInt(id)) { return false; }
+        if(parseInt(this.state.song.song_id) === parseInt(id)) { return false; }
         var self = this;
         songsService.getSong(id).then(function (result) {
             self.setState({
@@ -168,15 +172,16 @@ class SongDisplay extends Component {
     }
 
     render() {
+        console.log(this.props);
         if(this.props.widescreen){
             
             return (
                 <div>
                     <div className="links-parent">
                         {this.props.userLoggedIn && 
-                        <Link className="control-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
+                        <Link className="control-link" to={`/song/${this.state.song.song_id}/edit`}>Edit</Link>
                         }
-                        <Link className="control-link" to={`/song/${this.state.song.id}`}>Full Screen</Link>
+                        <Link className="control-link" to={`/song/${this.state.song.song_id}`}>Full Screen</Link>
                     </div>
                     <div>
                         <div className="song-display-title">{this.state.song.title}title</div>
@@ -190,7 +195,7 @@ class SongDisplay extends Component {
                 <div>
                     {this.props.userLoggedIn && 
                     <div className="links-parent">
-                        <Link className="control-link" to={`/song/${this.state.song.id}/edit`}>Edit</Link>
+                        <Link className="control-link" to={`/song/${this.state.song.song_id}/edit`}>Edit</Link>
                     </div>
                     }
                     <div className="song-display-title">{this.state.song.title}</div>

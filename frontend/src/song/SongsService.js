@@ -40,7 +40,7 @@ export default class SongsService {
     }
 
     updateSong(song){
-        const url = `${API_URL}/api/song/${song.id}/edit`;
+        const url = `${API_URL}/api/song/${song.song_id}/edit`;
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
 

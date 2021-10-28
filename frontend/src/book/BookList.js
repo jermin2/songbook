@@ -72,7 +72,7 @@ class BookList extends Component {
         return (
                 <div className="book-list">
                     {this.state.books.map( b =>
-                        <div className="book-list-title nav-item" key={b.id} onClick={ () => this.handleClick(b.id)}>{b.title}</div>
+                        <div className="book-list-title nav-item" key={b.id} onClick={ () => this.handleClick(b.book_id)}>{b.title}</div>
                     )}
                 </div>
         );

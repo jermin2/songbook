@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { Route } from 'react-router-dom';
-import SongsList from './song/SongsList'
+import {SongsList} from './song/SongsList'
 import SongDisplay from './song/SongDisplay'
 import SongEdit from './song/SongEdit'
 import BookDisplay from './book/BookDisplay'
-import BookEdit from './book/BookEdit'
+import {BookEdit} from './book/BookEdit'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -87,11 +87,11 @@ class App extends Component {
           <h1 className="title"><Link to="/">Song Book</Link></h1>
 
           <div className="content">
-            <Route path="/" exact component={SongsList} />
+            <Route path="/" exact render={(props) => <SongsList {...props} mode={'SONG_LIST'} />} />
             <Route path="/song/:id/edit" component={SongEdit} />
             <Route path="/book/:id/edit"  component={BookEdit} />
             <Route path="/add/song" exact component={SongEdit} />
-            <Route path="/song/:id" exact component={SongDisplay} />
+            <Route path="/song/:id" exact render={(props) => <SongDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
             {/* <Route path="/book/:id" exact component={BookDisplay} /> */}
             <Route exact path="/book/:id" render={(props) => <BookDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
 

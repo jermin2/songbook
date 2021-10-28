@@ -82,10 +82,11 @@ a {
 }
 
 
-.song-title {
+.song-item {
   font-size: 18px;
   padding: 6px;
   text-align: center;
+  display: flex;
 }
 
 .toggle:hover{
@@ -93,7 +94,7 @@ a {
   cursor: pointer;
   stroke-width:2px;
 }
-.song-title:hover{
+.song-item:hover{
   font-weight: bold;
   cursor: pointer;
 }
@@ -191,4 +192,19 @@ div[data-selected=true] {
   display:flex;
   justify-content: center;
   padding-bottom: 15px;
+}
+
+.song-item > .song-book-info {
+  font-size: smaller;
+  font-style: italic;
+  padding-left: 10px;
+}
+
+.song-item > .song-index {
+  display: inline;
+}
+
+.song-title {
+  display: inline;
+  flex-grow: 1;
 }

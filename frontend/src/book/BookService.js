@@ -13,6 +13,11 @@ export default class BookService {
         return axios.get(url).then(response => response.data).catch(e => console.log(e));
     }
 
+    getBookSongs(){
+        const url = `${API_URL}/api/booksongs/`;
+        return axios.get(url).then(response => response.data).catch(e => console.log(e));
+    }
+
     deleteBook(id){
         const url = `${API_URL}/api/book/${id}`;
         const token = sessionStorage.getItem("token");
@@ -27,21 +32,22 @@ export default class BookService {
     }
 
     createBook(book){
+        const b = {...book, year: 2000 }
         const url = `${API_URL}/api/book/`;
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-        return axios.post(url,book, headers).then(response => {
+        return axios.post(url,b, headers).then(response => {
             console.log(response.data);
             alert("Success");}
          ).catch(e => {
-            console.log(e);
+            console.log(e, b);
             alert("An error occured");
         })
 
     }
 
     updateBook(book){
-        const url = `${API_URL}/api/book/${book.id}/edit`;
+        const url = `${API_URL}/api/book/${book.book_id}/edit`;
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
         return axios.put(url,book, headers).then(response => {

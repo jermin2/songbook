@@ -42,7 +42,7 @@ def edit_song(request, id):
     data = json.loads(request.body)
     print(data)
 
-    song = Song.objects.get(id = int(data.get('id')))
+    song = Song.objects.get(song_id = int(data.get('song_id')))
 
     # Add or remove the song from the user's favourites
     try:
@@ -68,19 +68,20 @@ def edit_book(request, id):
     data = json.loads(request.body)
     songs = data.get('songs')
 
-    book = Book.objects.get(id = int(data.get('id')))
+    book = Book.objects.get(book_id = int(data.get('book_id')))
 
     # Delete all the songs in the book
     book.songs.clear()
 
     index = 1
 
-    for song_id in songs:
-        s = Song.objects.get(id=song_id)
+    for songObj in songs:
+        print(songObj)
+        s = Song.objects.get(song_id=songObj.get('song_id'))
         print(s.title)
         BookSongs.objects.create(
-            book=book,
-            song=s,
+            book_id=book,
+            song_id=s,
             index=index
         )
 
