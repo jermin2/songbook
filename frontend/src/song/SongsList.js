@@ -20,19 +20,38 @@ export const SongsList = (data) => {
     const [filtered, setFiltered] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [mode, setMode] = useState("");
+
+    // How many songs to display at a time
+    const [songLimit, setSongLimit] = useState(100);
   
+    useEffect( () => {
+        window.addEventListener("scroll", (e) => {handleScroll(e)});
+    })
+
+    // Display more songs if we are near the bottom of the screen
+    function handleScroll(e){
+        const {
+            scrollTop,
+            scrollHeight,
+            clientHeight
+        } = document.documentElement;
+
+        if(scrollTop + (clientHeight*2) > scrollHeight){
+            setSongLimit(songLimit+100);
+        }
+    }
     // If we change mode to BOOK_EDIT_SELECT or SONG_LIST
     useEffect( () => {
         // If we are in BOOK_EDIT_SELECT MODE and no songs
         if(mode===BOOK_EDIT_SELECT || mode===SONG_LIST){
             if(!songs || songs.length===0){
+                
                 songsService.getSongs().then( result => {
-                    console.log("set songs", result);
                     setSongs(result);
                 });
             }  
         }
-    },[mode, songs])
+    },[mode])
 
 
     // Change modes
@@ -43,20 +62,19 @@ export const SongsList = (data) => {
     
     // What to do if a book is given / changed
     useEffect( () => {
-        if(!data.book) return;
-        // console.log("change in book", mode, data.book);
+        if(!data.book || !data.book.songs || data.book.book_id===-1) return;
+        console.log("change in book", mode, data.book);
         if(data.mode === BOOK_EDIT) {
                 // If the song and book lengths are the same do nothing
                 // if( songs.length === data.book.songs.length || !data.book) return
             if(!data.book || data.book.songs.length === 0) return;
-
+        }
+        else {
             // Get other data like title and text for each song
-            const songList = songHelper.addSongData(data.book.songs);
-            setSongs(songList);
-        } else {
-            const songList = songHelper.addSongData(data.book.songs);
-            console.log("songs changed", songList );
-            setSongs(songList);
+            songHelper.addSongData(data.book.songs).then( result => {
+                console.log("songs changed", result );
+                setSongs(result);
+            })
         }
     // eslint-disable-next-line
     },[data.book]);
@@ -81,22 +99,37 @@ export const SongsList = (data) => {
 
     // Filter
     useEffect( () => {
+
+        var list = [];
+        if(!songs || songs.length===0) return;
+
+        // If there is no search term
         if(searchTerm.length===0){
             songs.forEach(s => s.book_title="")
-            setFiltered(songs);
-            
-            return;
-        }
+            list = songs;
+        } else
+        // if search term is a number and greater than 0
         if(!isNaN(searchTerm) && searchTerm.length>0){
-            const filList = songHelper.filterByIndexes(parseInt(searchTerm))
-            setFiltered(filList);
-            return;
-        }
 
-        const l = songs.filter(searchFilter);
-        setFiltered(l);
+            songHelper.filterByIndexes(parseInt(searchTerm)).then(result => {
+                list = result;
+                console.log("index search", list);
+                setFiltered(list);
+                return;
+            });
+
+            //Normal search term
+        } else {
+            // Apply the filter
+            list = songs.filter(searchFilter);
+        }
+        
+        // Slice to reduce the number of songs shown on screen
+        setFiltered(list.slice(0,songLimit));
+        // setFiltered(songs);
+
         // eslint-disable-next-line
-    },[songs, searchTerm])
+    },[songs, searchTerm, songLimit])
 
     function handleClick(id) {
         console.log(mode, id, songs);
@@ -133,6 +166,12 @@ export const SongsList = (data) => {
         }
     };
 
+    function onScroll(e) {
+        if(e){
+            console.log(e);
+        }
+    }
+
     function searchFilter(song) {
         //if the search term is a number
         if(!isNaN(searchTerm) && searchTerm.length>0){
@@ -146,7 +185,7 @@ export const SongsList = (data) => {
         } else {
 
             // remove any chords and comments - TODO: Can we do this before hand?
-            const searchString = song.text.replace(/\[(.*?)\]/img, "") //remove chords
+            const searchString = song.lyrics.replace(/\[(.*?)\]/img, "") //remove chords
             .replace(/#[\s\S]+?$/gim, "") //remove comments
             .replace(/(\n\r)+|(\r\n)+|\n+/img, " "); //remove new lines
 
@@ -174,8 +213,8 @@ export const SongsList = (data) => {
     }
     // For all other modes, return this
     return (      
-        <div> 
-            <div className="song-list">
+        <div onScroll={()=>{console.log("scroll")}}> 
+            <div className="song-list" onScroll={()=>{console.log("scroll")}}>
                 <input className="search" onChange={handleChange} autoFocus placeholder="Type to search"/>
                 <div className="title-list">
                     {filtered.map( s =>

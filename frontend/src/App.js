@@ -19,6 +19,8 @@ import NewBookModal from './components/NewBookModal'
 import SideNav from './SideNav'
 import './App.css';
 
+import localForage from 'localforage';
+
 import AuthService from './AuthService'
 const authService = new AuthService();
 
@@ -73,17 +75,16 @@ class App extends Component {
   }
   render() {
 
-
     return (
       <DndProvider backend={HTML5Backend}>
       <BrowserRouter>
-      <div className="main">
+      <div className="main" onScroll={()=>{console.log("scroll")}}>
         <SideNav 
           toggleLogin={this.toggleLogin} 
           handleLogout={this.handleLogout} 
           userLoggedIn={this.state.userLoggedIn} 
           newBook={this.toggleShowNewBook}/>
-        <div className="app">
+        <div className="app" >
           <h1 className="title"><Link to="/">Song Book</Link></h1>
 
           <div className="content">

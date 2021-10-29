@@ -22,8 +22,8 @@ class BookList extends Component {
 
         bookService.getBooks().then(function (result) {
             result = result.sort( (s1, s2) => {
-                if (s1.title > s2.title) { return 1; }
-                else if (s2.title > s1.title){ return -1; }
+                if (s1.name > s2.name) { return 1; }
+                else if (s2.name > s1.name){ return -1; }
                 else return 0;
             });
             self.setState({
@@ -40,8 +40,8 @@ class BookList extends Component {
 
             if (self.state.books.length !== result.length){
                 result = result.sort( (s1, s2) => {
-                    if (s1.title > s2.title) { return 1; }
-                    else if (s2.title > s1.title){ return -1; }
+                    if (s1.name > s2.name) { return 1; }
+                    else if (s2.name > s1.name){ return -1; }
                     else return 0;
                 });
                 self.setState({
@@ -72,7 +72,7 @@ class BookList extends Component {
         return (
                 <div className="book-list">
                     {this.state.books.map( b =>
-                        <div className="book-list-title nav-item" key={b.book_id} onClick={ () => this.handleClick(b.book_id)}>{b.title}</div>
+                        <div className="book-list-title nav-item" key={b.book_id} onClick={ () => this.handleClick(b.book_id)}>{b.name}</div>
                     )}
                 </div>
         );

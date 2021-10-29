@@ -3,26 +3,27 @@ from django.db import models
 # Create your models here.
 class Song(models.Model):
     song_id = models.BigAutoField(primary_key=True)
-    title = models.CharField(max_length=100)
-    text = models.TextField()
+    title = models.CharField(max_length=100) 
+    lyrics = models.TextField()
+    lang = models.CharField(max_length=20)
 
     def _str_(self):
         return self.title
 
 class Book(models.Model):
     book_id = models.BigAutoField(primary_key=True)
-    title = models.CharField(max_length=100)
-    year = models.IntegerField(null=True,blank=True)
-    songs = models.ManyToManyField(Song, related_name="books", through="BookSongs")
+    name = models.CharField(max_length=100)
+    lang = models.CharField(max_length=20)
+    slug = models.CharField(max_length=50)
+    songs = models.ManyToManyField(Song, related_name="books", through="BookSong")
 
     def _str_(self):
         return self.title
 
-class BookSongs(models.Model):
+class BookSong(models.Model):
     song_id = models.ForeignKey(Song, on_delete=models.CASCADE)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
-    index = models.IntegerField(null=True,blank=True)
-    variant = models.TextField(null=True, blank=True)
+    index = models.IntegerField()
 
     class Meta:
         constraints = [

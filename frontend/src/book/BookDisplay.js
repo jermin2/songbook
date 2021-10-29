@@ -15,8 +15,8 @@ class BookDisplay extends Component {
         super(props);
         this.state = {
             book: {
-                id: -1,
-                title: "",
+                book_id: -1,
+                name: "",
                 songs: [],
             },
             widescreen: true,
@@ -82,7 +82,7 @@ class BookDisplay extends Component {
         return (
             <div className="book-display-parent widescreen-parent">
                 <div className="book-display widescreen">
-                    <h2 className="book-name">{this.state.book.title}</h2>
+                    <h2 className="book-name">{this.state.book.name}</h2>
                     {this.props.userLoggedIn && 
                     <div className="links-parent">
                         <Link  className="book-control-link" to={`/book/${this.state.book.book_id}/edit`}>Edit</Link>

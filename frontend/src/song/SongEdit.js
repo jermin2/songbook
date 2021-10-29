@@ -86,7 +86,7 @@ class SongEdit extends Component {
                         <Form.Control type="text" name="title" placeholder="Title" value={this.state.song.title} onChange={this.handleChange} />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Control className="edit-song-textarea" as="textarea" name="text" value={this.state.song.text} onChange={this.handleChange}/>
+                        <Form.Control className="edit-song-textarea" as="textarea" name="text" value={this.state.song.lyrics} onChange={this.handleChange}/>
                     </Form.Group>
                     <div style={divStyle}>
                     <Button className="btn-danger" onClick={() => this.handleDelete()}>Delete</Button>

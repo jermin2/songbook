@@ -61,7 +61,7 @@ export const BookEdit = (data) => {
             
         <div className="book-edit-parent widescreen-parent">
             <div className="book-edit widescreen">
-                <h2 className="book-name ">{book.title}</h2>
+                <h2 className="book-name ">{book.name}</h2>
                 <div className="links-parent">
                  <button className="control-link" onClick={()=>handleClick()}>Save</button>
                 </div>

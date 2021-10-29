@@ -89,62 +89,74 @@ class SongDisplay extends Component {
 
         //If in SONG_MODE, then parse the song from props instead of state
         if (this.props.mode && this.props.mode === "BY_SONG" ) {
-            var song_text = this.props.song.text
+            var song_text = this.props.song.lyrics
         }
         else {
-            song_text = this.state.song.text
+            song_text = this.state.song.lyrics
         }
+        // if song_text doesn't exist, then return
+        if (!song_text) return <div></div>
 
         // Sanitize the inputs
         var song_text_sanitised = song_text.replace(/(\r\n)|\r|\n/igm, '\n')
         var blocks = song_text_sanitised.split("\n\n");
         
         return( <>
-            {blocks.map( (block) => this.parseBlock(block) ) }
+            {blocks.map( (block, itr) => this.parseBlock(block, itr) ) }
             </>
         )
     }
 
-    parseBlock = (block) => {
+    parseBlock = (block, itr) => {
 
         var lines = block.split("\n");
 
+        // c for chorus
         if (block.startsWith("c\n") ) {
             // Remove the "c"
             lines.splice(0,1)
             return (
-                <div key={`b${block}`}>
-                <div className="chorus" key={`c${block}`}>
-                {lines.map( (line) => this.parseLineType(line) ) }
+                <div key={`b-${itr}`}>
+                <div className="chorus" key={`c-${itr}`}>
+                {lines.map( (line, itr) => this.parseLineType(line, itr) ) }
                 </div>
-                <div className="line" key={`g${block}`}>&nbsp;</div>
+                <div className="line" key={`space-${itr}`}>&nbsp;</div>
+                </div>
+            )
+        } else if (block.startsWith("  ")){ //songbase version starts with 2 spaces
+            return (
+                <div key={`b-${itr}`}>
+                <div className="chorus" key={`c-${itr}`}>
+                {lines.map( (line, itr) => this.parseLineType(line.trim(), itr) ) }
+                </div>
+                <div className="line" key={`g-${itr}`}>&nbsp;</div>
                 </div>
             )
         }
         return(
-            <div key={`b${block}`}>
-            <div className="verse" key={`v${block}`}>
-            {lines.map( (line) => this.parseLineType(line) ) }
+            <div key={`b-${itr}`}>
+            <div className="verse" key={`v-${itr}`}>
+            {lines.map( (line, itr) => this.parseLineType(line, itr) ) }
             
             </div>
-            <div className="line" key={`g${block}`}>&nbsp;</div>
+            <div className="line" key={`g-${itr}`}>&nbsp;</div>
             </div>
         )
     }
 
-    parseLineType = (line) => {
-        if (line[0] === '#'){ return ( <div className="line" key={this.getUniqueId}>{this.parseComment(line)}</div>); } //Comments
+    parseLineType = (line, itr) => {
+        if (line[0] === '#'){ return ( <div className="line" key={`${itr}`}>{this.parseComment(line)}</div>); } //Comments
         if (line.search( /^\d/ig) > -1 ){ 
-            return ( <div className="verse-number">{line}</div>); } //Numbers
+            return ( <div className="verse-number" key={`${itr}`}>{line}</div>); } //Numbers
         else {  
             // Check for chords
             if (line.search(/\[/) > -1) {
                 var words = line.split(" ");
-                return ( <div className="line" key={line}><span className="line-text">{words.map( word => this.parseWords(word))}</span></div> ); 
+                return ( <div className="line" key={`${itr}`}><span className="line-text">{words.map( (word, itr) => this.parseWords(word, itr))}</span></div> ); 
             } 
             else {
                 //return the line if no chords
-                return ( <div className="line" key={line}><span className="line-text">{line}&nbsp;</span></div>)
+                return ( <div className="line" key={`${itr}`}><span className="line-text">{line}&nbsp;</span></div>)
             }
         }
     }
@@ -153,18 +165,18 @@ class SongDisplay extends Component {
         return ( <span className="comment"><em>{commented_edit[1]}</em></span> )
     }
 
-    parseWords = (word) => {
+    parseWords = (word, itr) => {
         // Chords in the word
         // Split the word in the case of multiple chords - chord-word
         const arr = word.split ( /(\[.*?\])/ );
 
         return (
-            <span className="chord-word" key={word}>{
-            arr.map( word_chord => {
+            <span className="chord-word" key={itr}>{
+            arr.map( (word_chord, itrc) => {
                 // If its a chord
                 if( word_chord[0] === "["){
                     const chord = word_chord.split( /\[(.*?)\]/ );
-                    return ( <span className="chord" key={word_chord}>{chord[1]}</span>);
+                    return ( <span className="chord" key={itrc}>{chord[1]}</span>);
                 } else {   return word_chord;  } // otherwise just return the 'part word'
             })
             }&nbsp;</span> //need a space after each word
@@ -172,9 +184,8 @@ class SongDisplay extends Component {
     }
 
     render() {
-        console.log(this.props);
         if(this.props.widescreen){
-            console.log("return a")
+            // console.log("return a")
             return (
                 <div>
                     <div className="links-parent">
@@ -184,14 +195,14 @@ class SongDisplay extends Component {
                         <Link className="control-link" to={`/song/${this.state.song.song_id}`}>Full Screen</Link>
                     </div>
                     <div>
-                        <div className="song-display-title">{this.state.song.title}title</div>
+                        <div className="song-display-title">{this.state.song.title}</div>
                     <div className="song">{this.parseSong()}</div>
                     </div>
                 </div>
             )
         }
         else {
-            console.log('return b')
+            // console.log('return b')
             return(
                 <div>
                     {this.props.userLoggedIn && 
