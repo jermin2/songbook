@@ -23,21 +23,34 @@ export const SongsList = (data) => {
 
     // How many songs to display at a time
     const [songLimit, setSongLimit] = useState(100);
-  
-    useEffect( () => {
-        window.addEventListener("scroll", (e) => {handleScroll(e)});
-    })
+
+    // How to order the data
+    const [orderBy, setOrderBy] = useState('abc')
 
     // Display more songs if we are near the bottom of the screen
-    function handleScroll(e){
-        const {
-            scrollTop,
-            scrollHeight,
-            clientHeight
-        } = document.documentElement;
+    const innerScroll = (e) =>{
+        const { scrollTop, scrollHeight, clientHeight } = e.target;
+        if(mode=== BOOK_LIST)
+            if(scrollTop + (clientHeight*1.5) > scrollHeight){
+                if(songLimit<4000){
+                console.log("set limit");
+                setSongLimit(songLimit+100);
+            }
+        }
+    }
 
-        if(scrollTop + (clientHeight*2) > scrollHeight){
-            setSongLimit(songLimit+100);
+    const mainScroll = (e) =>{
+        const { scrollTop, scrollHeight, clientHeight } =  e.target;
+        // console.log(scrollTop, scrollHeight, clientHeight)
+
+        if(mode!== BOOK_LIST){
+            if(scrollTop+(clientHeight*2) >= scrollHeight) {
+                if(songLimit<4000){
+                    console.log("increase limit main", songLimit);
+                    setSongLimit(songLimit+100);
+                }
+                
+            }
         }
     }
     // If we change mode to BOOK_EDIT_SELECT or SONG_LIST
@@ -51,6 +64,11 @@ export const SongsList = (data) => {
                 });
             }  
         }
+
+        // if(mode===BOOK_LIST){
+        //     console.log("removed event listener")
+        //     window.removeEventListener('scroll', handleScroll);
+        // }
     },[mode])
 
 
@@ -97,6 +115,13 @@ export const SongsList = (data) => {
         // eslint-disable-next-line
     },[data.selected, mode]);
 
+    function sortAlpha(){
+        setOrderBy('abc');
+    }
+
+    function sortNum(){
+        setOrderBy('num');
+    }
     // Filter
     useEffect( () => {
 
@@ -123,13 +148,26 @@ export const SongsList = (data) => {
             // Apply the filter
             list = songs.filter(searchFilter);
         }
-        
+
+        if(orderBy==='abc'){
+            list.sort( (s1,s2) => {
+                const t1 = s1.title.replace(/[^a-z0-9 ]+/igm,'')
+                const t2 = s2.title.replace(/[^a-z0-9 ]+/igm,'')
+                return t1.localeCompare(t2)
+            })
+        } else {
+            list.sort( (s1,s2) => {return s1.index - s2.index})
+        }
+
         // Slice to reduce the number of songs shown on screen
-        setFiltered(list.slice(0,songLimit));
-        // setFiltered(songs);
+        list = list.slice(0,songLimit);
+
+        setFiltered(list);
 
         // eslint-disable-next-line
-    },[songs, searchTerm, songLimit])
+    },[songs, searchTerm, songLimit, orderBy])
+
+
 
     function handleClick(id) {
         console.log(mode, id, songs);
@@ -166,12 +204,6 @@ export const SongsList = (data) => {
         }
     };
 
-    function onScroll(e) {
-        if(e){
-            console.log(e);
-        }
-    }
-
     function searchFilter(song) {
         //if the search term is a number
         if(!isNaN(searchTerm) && searchTerm.length>0){
@@ -187,7 +219,8 @@ export const SongsList = (data) => {
             // remove any chords and comments - TODO: Can we do this before hand?
             const searchString = song.lyrics.replace(/\[(.*?)\]/img, "") //remove chords
             .replace(/#[\s\S]+?$/gim, "") //remove comments
-            .replace(/(\n\r)+|(\r\n)+|\n+/img, " "); //remove new lines
+            .replace(/(\n\r)+|(\r\n)+|\n+/img, " ") //remove new lines
+            .replace(/[^a-z0-9 ]+/img, ); //remove punctuation
 
             // search through the string (the 'i' flag means case insensitive)
             if (searchString.search( new RegExp(searchTerm, 'img') ) !== -1){
@@ -213,10 +246,12 @@ export const SongsList = (data) => {
     }
     // For all other modes, return this
     return (      
-        <div onScroll={()=>{console.log("scroll")}}> 
-            <div className="song-list" onScroll={()=>{console.log("scroll")}}>
+        
+        <div className="song-list-parent" data-mode={mode} onScroll={mode === BOOK_LIST ? null : mainScroll }> 
+            <div className="song-list">
                 <input className="search" onChange={handleChange} autoFocus placeholder="Type to search"/>
-                <div className="title-list">
+                {mode===BOOK_LIST && <div className="sort-controls song-item"><div className="song-index" onClick={sortNum}>123↓</div><div className="song-title" onClick={sortAlpha}>abc↓</div></div> }
+                <div className= {mode==='BOOK_LIST' ? "title-list book-list" : "title-list"} onScroll={innerScroll}>
                     {filtered.map( s =>
                         <div className="song-item" data-selected={s.selected} data-key={s.song_id} key={s.id ? s.id : s.song_id} onClick={() => handleClick(s.song_id)}>
                        

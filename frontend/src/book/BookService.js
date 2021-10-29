@@ -75,6 +75,8 @@ export default class BookService {
     }
 
     getBook(id){
+
+        return booksTable.getItem(id.toString()).then( result => result).catch(e => console.log(e) );
         const url = `${API_URL}/api/book/${id}`;
         return axios.get(url).then(response => response.data).catch(e => console.log(e));
     }
