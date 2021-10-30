@@ -2,14 +2,14 @@ from rest_framework import serializers
 from .models import Song, Book, BookSong
 
 class SongSerializer(serializers.ModelSerializer):
-    song_id = serializers.IntegerField()
+    # song_id = serializers.IntegerField() # This needs to be uncommented if you want to overwrite during create
 
     class Meta:
         model = Song
         fields = ('song_id', 'title', 'lyrics', 'lang')
 
 class BookSongSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    # id = serializers.IntegerField()
 
     class Meta:
         model = BookSong
@@ -18,7 +18,7 @@ class BookSongSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.ModelSerializer):
     songs = BookSongSerializer(source='booksong_set', many=True, required=False)
-    book_id = serializers.IntegerField()
+    # book_id = serializers.IntegerField() # This needs to be uncommented if you want to overwrite during create
 
     class Meta:
         model = Book

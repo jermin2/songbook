@@ -97,7 +97,8 @@ export default class SongsService {
 
 
     getSong(id){
-        return songsTable.getItem(id.toString()).then( result => result).catch(e => console.log(e) );
+        console.log("id", id);
+        return songsTable.getItem(id.toString()).then( result => {console.log("ii", result); return result}).catch(e => console.log(e) );
     }
 
     deleteSong(id){
@@ -119,6 +120,7 @@ export default class SongsService {
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
         return axios.post(url,song, headers).then(response => {
             console.log(response.data);
+            songsTable.setItem(response.data.song_id.toString(), response.data)
             alert("Success");}
          ).catch(e => {
             console.log(e);
@@ -133,6 +135,7 @@ export default class SongsService {
 
         return axios.put(url, song, headers).then(response => {
                 console.log(response.data);
+                songsTable.setItem(response.data.song_id.toString(), response.data)
                 alert("Success");}
              ).catch(e => {
                 console.log(e);

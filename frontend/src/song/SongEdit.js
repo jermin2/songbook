@@ -54,8 +54,19 @@ class SongEdit extends Component {
     handleChange = (event) => {
 
         let { name, value } = event.target;
+
+        // Captilize the first letter
+        if(name==="title"){
+            const words = value.split(' ');
+            let newstring = "";
+            const newwords = words.map( w => {
+                 w = w.charAt(0).toUpperCase() + w.slice(1);
+                 return w;
+            })
+            value = newwords.toString().replace(/,/g,' ');
+        }
         const activeSong = {...this.state.song, [name]: value };
-        console.log(name, value);
+
         this.setState({
             song:activeSong
         })
@@ -63,7 +74,8 @@ class SongEdit extends Component {
     }
 
     handleSave() {
-        if(this.state.song.song_id === -1){
+        console.log(this.state.song);
+        if(this.state.song.id === -1){
             songService.createSong(this.state.song);
         } else {
             songService.updateSong(this.state.song);

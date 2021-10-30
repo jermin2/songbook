@@ -5,7 +5,7 @@ class Song(models.Model):
     song_id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=100) 
     lyrics = models.TextField()
-    lang = models.CharField(max_length=20)
+    lang = models.CharField(max_length=20, default="english")
 
     def _str_(self):
         return self.title
@@ -13,7 +13,7 @@ class Song(models.Model):
 class Book(models.Model):
     book_id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    lang = models.CharField(max_length=20)
+    lang = models.CharField(max_length=20, default="english")
     slug = models.CharField(max_length=50)
     songs = models.ManyToManyField(Song, related_name="books", through="BookSong")
 

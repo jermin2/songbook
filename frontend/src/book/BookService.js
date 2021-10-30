@@ -142,12 +142,14 @@ export default class BookService {
     }
 
     createBook(book){
-        const b = {...book, year: 2000 }
+        const slug = book.name.replace(' ', '_').toLowerCase();
+        const b = {...book, slug: slug}
         const url = `${API_URL}/api/book/`;
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
         return axios.post(url,b, headers).then(response => {
             console.log(response.data);
+            booksTable.setItem(response.data.book_id.toString(), response.data);
             alert("Success");}
          ).catch(e => {
             console.log(e, b);

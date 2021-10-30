@@ -15,7 +15,7 @@ export default class SongWorker {
     getSongs() {
         const url = `${API_URL}/api/song/`;
         return axios.get(url).then(response => {
-            localStorage.setItem("songs", response.data);
+            console.log("Fetched ", response.data.length)
             return response.data }).catch(e => console.log(e));
     }
 

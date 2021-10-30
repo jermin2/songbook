@@ -50,7 +50,9 @@ class SongDisplay extends Component {
     getSong(id){
         if(parseInt(this.state.song.song_id) === parseInt(id)) { return false; }
         var self = this;
+        console.log("get song called", id);
         songsService.getSong(id).then(function (result) {
+            console.log("get song called r", result);
             self.setState({
                 song: result
             })
