@@ -29,3 +29,7 @@ class BookSong(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['song_id', 'book_id'], name='unique_song_in_book')
         ]
+
+class PrintPage(models.Model):
+    lyrics = models.TextField()
+    style = models.TextField()

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Song, Book, BookSong
+from .models import Song, Book, BookSong, PrintPage
 
 class SongSerializer(serializers.ModelSerializer):
     # song_id = serializers.IntegerField() # This needs to be uncommented if you want to overwrite during create
@@ -23,3 +23,9 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ('book_id', 'name', 'slug', 'lang', 'songs')
+
+class PrintPageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PrintPage
+        fields = '__all__'
