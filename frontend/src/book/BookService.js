@@ -5,10 +5,15 @@ import localforage from 'localforage';
 
 const API_URL = 'http://localhost:8000';
 
-// use the songs table
+// use the books table
 const booksTable = localforage.createInstance({
     name: "songbaseDB",
     storeName: "books"
+});
+// use the bookksongs table
+const bookSongsTable = localforage.createInstance({
+    name: "songbaseDB",
+    storeName: "booksongs"
 });
 const lang = "english";
 
@@ -16,7 +21,7 @@ const lang = "english";
 export default class BookService {
 
     static books = [];
-
+    static booksongs = [];
 
     getBooks() {
         console.log("get books called");
@@ -81,7 +86,44 @@ export default class BookService {
         return axios.get(url).then(response => response.data).catch(e => console.log(e));
     }
 
-    getBookSongs(){
+    async getBookSongs(){
+        console.log("get song books called");
+        if(BookService.booksongs.length!== 0){
+            // Found in memory
+            return BookService.booksongs;
+        }
+
+        //check local storage
+        const length = await bookSongsTable.length().then( result =>  { return result })
+
+        //if length is zero, then load the data into local db, then load it
+        if(length===0){
+            const t_booksongs = await this.fetchBookSongs();
+
+            //write to table
+            t_booksongs.forEach( booksong => {
+                bookSongsTable.setItem(booksong.id.toString(), booksong)
+            })
+
+            BookService.booksongs = t_booksongs;
+            return t_booksongs;
+        
+        // load the data from local db
+        } else {
+            const t_booksongs = []
+            const a = await bookSongsTable.iterate( (value,key,iterationNumber) => {
+                t_booksongs.push(value);
+            })
+
+            console.log(t_booksongs);
+            BookService.booksongs = t_booksongs;
+            return t_booksongs;
+        }
+
+
+    }
+
+    fetchBookSongs(){
         const url = `${API_URL}/api/booksongs/`;
         return axios.get(url).then(response => response.data).catch(e => console.log(e));
     }

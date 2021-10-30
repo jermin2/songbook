@@ -40,7 +40,7 @@ body {
   line-height: 18px;
 }
 html {
-  overflow-y:hidden;
+
 }
 
 a {
@@ -136,7 +136,7 @@ a {
 
 .title-list.book-list{
   overflow-y: scroll;
-  max-height:80vh;
+  max-height:60vh;
 }
 
 .book-name {
@@ -224,4 +224,9 @@ div[data-selected=true] {
 
 .song-list-parent[data-mode='BOOK_LIST'] {
   overflow-y:hidden;
+}
+
+.title-list[data-mode="BOOK_EDIT"] {
+  overflow-y:scroll;
+  max-height:60vh;
 }

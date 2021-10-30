@@ -30,10 +30,10 @@ export const SongsList = (data) => {
     // Display more songs if we are near the bottom of the screen
     const innerScroll = (e) =>{
         const { scrollTop, scrollHeight, clientHeight } = e.target;
-        if(mode=== BOOK_LIST)
+
             if(scrollTop + (clientHeight*1.5) > scrollHeight){
                 if(songLimit<4000){
-                console.log("set limit");
+                console.log("set limit", songLimit);
                 setSongLimit(songLimit+100);
             }
         }
@@ -53,6 +53,11 @@ export const SongsList = (data) => {
             }
         }
     }
+
+    useEffect( () => {
+        document.body.style.overflow = 'hidden';
+    },[])
+
     // If we change mode to BOOK_EDIT_SELECT or SONG_LIST
     useEffect( () => {
         // If we are in BOOK_EDIT_SELECT MODE and no songs
@@ -65,10 +70,13 @@ export const SongsList = (data) => {
             }  
         }
 
-        // if(mode===BOOK_LIST){
-        //     console.log("removed event listener")
-        //     window.removeEventListener('scroll', handleScroll);
-        // }
+        if( mode===SONG_LIST){
+            setOrderBy('abc');
+        } else {
+            setOrderBy('num');
+        }
+        console.log("orderby", orderBy);
+
     },[mode])
 
 
@@ -87,7 +95,7 @@ export const SongsList = (data) => {
                 // if( songs.length === data.book.songs.length || !data.book) return
             if(!data.book || data.book.songs.length === 0) return;
         }
-        else {
+        {
             // Get other data like title and text for each song
             songHelper.addSongData(data.book.songs).then( result => {
                 console.log("songs changed", result );
@@ -109,6 +117,8 @@ export const SongsList = (data) => {
             const selSong = newSongList.find( e => e.song_id === s.song_id );
             selSong.selected = true;
         })
+
+
         
         setSongs(newSongList);
 
@@ -234,11 +244,11 @@ export const SongsList = (data) => {
         return <>NO SONGS</>
     }
     if(mode === 'BOOK_EDIT') {
-
+        console.log(filtered.length, "num songs", songs.length);
         return(
         <div className="song-list">
             <input className="search" onChange={handleChange()} autoFocus placeholder="Type to search"/>
-            <div className="title-list">
+            <div className="title-list" data-mode={mode} onScroll={innerScroll}>
                 <Bucket songs={filtered} updateList={data.updateList} />
             </div>
         </div>

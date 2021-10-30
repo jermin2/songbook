@@ -36,6 +36,10 @@ class SongDisplay extends Component {
                 return this.getSong(params.id);
             }
         }
+
+
+        document.body.style.overflow = 'visible';
+
     }
 
     getUniqueId(){
@@ -69,7 +73,7 @@ class SongDisplay extends Component {
             })
             return;
         }
-
+        document.body.style.overflow = 'visible';
         // load a song from memory
         const id = this.props.id;
         if( id ){
@@ -187,7 +191,7 @@ class SongDisplay extends Component {
         if(this.props.widescreen){
             // console.log("return a")
             return (
-                <div>
+                <div className="song-display-parent" >
                     <div className="links-parent">
                         {this.props.userLoggedIn && 
                         <Link className="control-link" to={`/song/${this.state.song.song_id}/edit`}>Edit</Link>
@@ -204,7 +208,7 @@ class SongDisplay extends Component {
         else {
             // console.log('return b')
             return(
-                <div>
+                <div className="song-display-parent">
                     {this.props.userLoggedIn && 
                     <div className="links-parent">
                         <Link className="control-link" to={`/song/${this.state.song.song_id}/edit`}>Edit</Link>
