@@ -32,7 +32,7 @@ class BookView(viewsets.ModelViewSet):
 
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])
-@api_view(['GET', 'PUT'])
+# @api_view(['GET', 'PUT'])
 def edit_song(request, id):  
 
     if request.user.is_anonymous:
@@ -58,7 +58,7 @@ def edit_song(request, id):
 
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])
-@api_view(['GET', 'PUT'])
+# @api_view(['GET', 'PUT'])
 def edit_book(request, id):  
 
     if request.user.is_anonymous:

@@ -230,3 +230,11 @@ div[data-selected=true] {
   overflow-y:scroll;
   max-height:60vh;
 }
+
+.printer-parent {
+  display: flex;
+}
+
+.editor, .viewer {
+  width: 50%;
+}
