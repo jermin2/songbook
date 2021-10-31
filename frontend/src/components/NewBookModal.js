@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-import BookService from '../book/BookService';
+import BookService from './book/BookService';
 const bookService = new BookService();
 
 export default function NewBookModal(props) {

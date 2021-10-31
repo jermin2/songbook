@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { Route } from 'react-router-dom';
-import {SongsList} from './song/SongsList'
-import SongDisplay from './song/SongDisplay'
-import SongEdit from './song/SongEdit'
-import BookDisplay from './book/BookDisplay'
-import {BookEdit} from './book/BookEdit'
-import {BookPrinter} from './components/BookPrinter'
+import {SongsList} from './components/song/SongsList'
+import SongDisplay from './components/song/SongDisplay'
+import SongEdit from './components/song/SongEdit'
+import BookDisplay from './components/book/BookDisplay'
+import {BookEdit} from './components/book/BookEdit'
+import {BookPrinter} from './components/printer/BookPrinter'
 
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -18,7 +18,7 @@ import LoginModal from "react-login-modal";
 import Modal from 'react-bootstrap/Modal';
 
 import NewBookModal from './components/NewBookModal'
-import SideNav from './SideNav'
+import SideNav from './components/SideNav'
 import './App.css';
 
 import AuthService from './AuthService'

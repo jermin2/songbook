@@ -8,7 +8,7 @@ import 'font-awesome/css/font-awesome.min.css';
 
 import { BrowserRouter } from 'react-router-dom';
 import { Route } from 'react-router-dom';
-import {BookPrinterPage} from './components/BookPrinterPage'
+import {BookPrinterPage} from './components/printer/BookPrinterPage'
 
 ReactDOM.render(
   <React.StrictMode>
