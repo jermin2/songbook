@@ -4,7 +4,9 @@ import React, {useEffect, useState} from 'react'
 import Parser from './Parser'
 
 const parser = new Parser();
-const MAX_COLUMNS = 1;
+const MAX_COLUMNS = 2;
+
+
 
 /*
 Renders a book suitable for printing
@@ -12,10 +14,10 @@ Currently on SONG_BLOCK mode, so it will keep songs together and avoid breaking 
 */
 export const PageRenderer = (data) => {
     const [lyrics, setLyrics] = useState(data.lyrics)
-    const [classes, ] = useState(data.classes);
+
     const [currentPage, setPage] = useState(1);
     const [currentArea, setArea] = useState(1);
-    
+
     // New data - Wipe the slate clean
     useEffect( () => {
         document.getElementById('viewer-parent').innerHTML = ""
@@ -40,7 +42,7 @@ export const PageRenderer = (data) => {
 
         // For each block
         song_blocks.forEach( block => {
-            console.log("writing to: ", curPageId, curAreaId);
+            // console.log("writing to: ", curPageId, curAreaId);
 
             // Get the area to write to
             const area = document.getElementById(`page-${curPageId}-area-${curAreaId}`);
@@ -53,7 +55,7 @@ export const PageRenderer = (data) => {
 
             // check for overflow
             if (area.scrollHeight > area.offsetHeight){
-                console.log("overflow")
+                // console.log("overflow")
 
                 //Remove the overflowing object
                 area.removeChild(blockObj);
@@ -101,13 +103,13 @@ export const PageRenderer = (data) => {
      * @returns [element, id] where element is the new page element. ID is the updated current ID
      */
     function getNewPage(page_id = currentPage) {
-        console.log("create new page");
+        // console.log("create new page");
         const e = document.createElement('div');
 
         const cur_page_id = page_id+1;
         e.setAttribute('id', `page-${cur_page_id}`)
 
-        e.setAttribute('class', classes.page)
+        e.setAttribute('class', "page")
 
         //Add new page to the viewer
         document.getElementById('viewer-parent').append(e);
@@ -127,7 +129,7 @@ export const PageRenderer = (data) => {
      *  page_id is the updated Page ID (updates when getNewPage is called)
      */
     function getNewArea(area_id = currentArea, page_id = currentPage){
-        console.log("create new area");
+        // console.log("create new area");
 
         var curPage = page_id;
 
@@ -144,7 +146,7 @@ export const PageRenderer = (data) => {
         //Create the new area for the current area id and page id
         const e = document.createElement('div')
         e.setAttribute('id', `page-${curPage}-area-${curArea}`)
-        e.setAttribute('class', classes.area)
+        e.setAttribute('class', "area")
 
         // this can probably be deleted
         setArea(curArea);
@@ -156,8 +158,8 @@ export const PageRenderer = (data) => {
 
     return (
         <div id="viewer-parent">
-            <div id={`page-1`} className={classes.page}>
-                <div id="page-1-area-1" className={classes.area}>
+            <div id={`page-1`} className={"page"}>
+                <div id="page-1-area-1" className={"area"}>
                 {lyrics}
                 </div>
             </div>

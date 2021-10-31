@@ -94,7 +94,7 @@ class App extends Component {
             <Route path="/book/:id/edit"  component={BookEdit} />
             <Route path="/add/song" exact component={SongEdit} />
             
-            <Route path="/printer" exact component={BookPrinter} />
+            <Route path="/printer/:id" component={BookPrinter} />
             <Route path="/song/:id" exact render={(props) => <SongDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
             {/* <Route path="/book/:id" exact component={BookDisplay} /> */}
             <Route exact path="/book/:id" render={(props) => <BookDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />

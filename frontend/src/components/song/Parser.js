@@ -66,8 +66,7 @@ export default class Parser {
         const firstLine = firstLineSplit[0];
 
         const song_text = song_block.replace(firstLine, '');
-        
-        console.log(song_block, firstLine, song_text);
+
 
         if (firstLine.search( /^\d/ig) > -1 ){ 
             return ( 
