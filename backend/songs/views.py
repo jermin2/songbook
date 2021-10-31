@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import SongSerializer, BookSerializer, BookSongSerializer, PrintPageSerializer
+from .serializers import *
 from rest_framework import viewsets, permissions
 from .models import Song, Book, BookSong, PrintPage
 from django.views.decorators.csrf import csrf_exempt
@@ -33,6 +33,10 @@ class BookView(viewsets.ModelViewSet):
 class PrintPageView(viewsets.ModelViewSet):
     serializer_class = PrintPageSerializer
     queryset = PrintPage.objects.all()
+
+class BookSongLyricsView(viewsets.ModelViewSet):
+    serializer_class = BookSongLyricsSerializer
+    queryset = Book.objects.all()    
 
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])

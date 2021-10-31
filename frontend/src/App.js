@@ -8,7 +8,8 @@ import SongEdit from './components/song/SongEdit'
 import BookDisplay from './components/book/BookDisplay'
 import {BookEdit} from './components/book/BookEdit'
 import {BookPrinter} from './components/printer/BookPrinter'
-
+import {PrinterList} from './components/printer/PrinterList'
+import {BookPrinterPage} from './components/printer/BookPrinterPage'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -93,8 +94,9 @@ class App extends Component {
             <Route path="/song/:id/edit" component={SongEdit} />
             <Route path="/book/:id/edit"  component={BookEdit} />
             <Route path="/add/song" exact component={SongEdit} />
-            
-            <Route path="/printer/:id" component={BookPrinter} />
+            <Route path="/printer/:id" exact component={BookPrinter} />
+            <Route path="/printer/" exact render={(props) => <PrinterList {...props} userLoggedIn={this.state.userLoggedIn} />} />
+            <Route path="/print/:id" exact component={BookPrinterPage} />
             <Route path="/song/:id" exact render={(props) => <SongDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
             {/* <Route path="/book/:id" exact component={BookDisplay} /> */}
             <Route exact path="/book/:id" render={(props) => <BookDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />

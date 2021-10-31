@@ -29,3 +29,11 @@ class PrintPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrintPage
         fields = '__all__'
+
+class BookSongLyricsSerializer(serializers.ModelSerializer):
+    # songs = BookSongSerializer(source='booksong_set', many=True, required=False)
+
+    class Meta:
+        model = Book
+        fields = ('book_id', 'name', 'songs')
+        depth = 2

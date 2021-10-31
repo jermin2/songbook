@@ -33,7 +33,7 @@ export const PageRenderer = (data) => {
     // Write the block into the Area. If it overflows, undo the actions, 
     // Create a new area, and write it into there
     useEffect( () => {
-        
+        if(!lyrics || lyrics.length < 1) return;
         // Break on song blocks. Keep song blocks together
         const song_blocks = lyrics.split('$');
 

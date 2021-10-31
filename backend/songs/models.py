@@ -31,5 +31,7 @@ class BookSong(models.Model):
         ]
 
 class PrintPage(models.Model):
+    name = models.CharField(max_length=100)
     lyrics = models.TextField()
-    style = models.TextField()
+    style = models.TextField(null=True, blank=True)
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
