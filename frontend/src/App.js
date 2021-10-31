@@ -9,6 +9,7 @@ import BookDisplay from './book/BookDisplay'
 import {BookEdit} from './book/BookEdit'
 import {BookPrinter} from './components/BookPrinter'
 
+
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
@@ -19,8 +20,6 @@ import Modal from 'react-bootstrap/Modal';
 import NewBookModal from './components/NewBookModal'
 import SideNav from './SideNav'
 import './App.css';
-
-import localForage from 'localforage';
 
 import AuthService from './AuthService'
 const authService = new AuthService();
@@ -80,6 +79,7 @@ class App extends Component {
       <DndProvider backend={HTML5Backend}>
       <BrowserRouter>
       <div className="main" onScroll={()=>{console.log("scroll")}}>
+      
         <SideNav 
           toggleLogin={this.toggleLogin} 
           handleLogout={this.handleLogout} 
@@ -93,6 +93,7 @@ class App extends Component {
             <Route path="/song/:id/edit" component={SongEdit} />
             <Route path="/book/:id/edit"  component={BookEdit} />
             <Route path="/add/song" exact component={SongEdit} />
+            
             <Route path="/printer" exact component={BookPrinter} />
             <Route path="/song/:id" exact render={(props) => <SongDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
             {/* <Route path="/book/:id" exact component={BookDisplay} /> */}

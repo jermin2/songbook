@@ -75,8 +75,8 @@ export const SongsList = (data) => {
         } else {
             setOrderBy('num');
         }
-        console.log("orderby", orderBy);
 
+    // eslint-disable-next-line
     },[mode])
 
 
@@ -95,13 +95,13 @@ export const SongsList = (data) => {
                 // if( songs.length === data.book.songs.length || !data.book) return
             if(!data.book || data.book.songs.length === 0) return;
         }
-        {
-            // Get other data like title and text for each song
-            songHelper.addSongData(data.book.songs).then( result => {
-                console.log("songs changed", result );
-                setSongs(result);
-            })
-        }
+        
+        // Get other data like title and text for each song
+        songHelper.addSongData(data.book.songs).then( result => {
+            console.log("songs changed", result );
+            setSongs(result);
+        })
+        
     // eslint-disable-next-line
     },[data.book]);
 

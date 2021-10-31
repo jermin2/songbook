@@ -58,7 +58,7 @@ class SongEdit extends Component {
         // Captilize the first letter
         if(name==="title"){
             const words = value.split(' ');
-            let newstring = "";
+
             const newwords = words.map( w => {
                  w = w.charAt(0).toUpperCase() + w.slice(1);
                  return w;

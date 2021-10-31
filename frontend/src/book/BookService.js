@@ -44,9 +44,7 @@ export default class BookService {
                     books.forEach( book => {
                         booksTable.setItem( book.book_id.toString(), book)
                     })
-                    
                 })
-
             }
         })
 
@@ -82,8 +80,8 @@ export default class BookService {
     getBook(id){
 
         return booksTable.getItem(id.toString()).then( result => result).catch(e => console.log(e) );
-        const url = `${API_URL}/api/book/${id}`;
-        return axios.get(url).then(response => response.data).catch(e => console.log(e));
+        // const url = `${API_URL}/api/book/${id}`;
+        // return axios.get(url).then(response => response.data).catch(e => console.log(e));
     }
 
     async getBookSongs(){
@@ -111,11 +109,10 @@ export default class BookService {
         // load the data from local db
         } else {
             const t_booksongs = []
-            const a = await bookSongsTable.iterate( (value,key,iterationNumber) => {
+            await bookSongsTable.iterate( (value,key,iterationNumber) => {
                 t_booksongs.push(value);
             })
 
-            console.log(t_booksongs);
             BookService.booksongs = t_booksongs;
             return t_booksongs;
         }

@@ -1,5 +1,42 @@
+/*
+Page
+Area
+Index
+Song
+*/
 
-export default class Renderer {
+
+/*
+Given the right lyrics, can parse the song into React HTML elements. No styling is included
+
+*/
+export default class Parser {
+
+    checkOverflow(id){
+        var area = document.getElementById(`area-${id}`);
+
+        console.log(area);
+    }
+    // Make a new area
+    newArea = (song_block) => {
+        this.columnNumber = this.columnNumber + 1
+        this.currentArea = this.currentArea + 1;
+
+        if(this.columnNumber === this.MAX_COLUMNS){
+            this.columnNumber = 0;
+            return(
+                // Add a new page
+                <div className="page">
+                    <div className='area' id={`area-${this.currentArea}`}>{this.parseSongBlock(song_block)}</div>
+                </div>
+                )
+        }
+
+        return (
+            <div className="page" id={`area-${this.currentArea}`}>{this.parseSongBlock(song_block)}</div>
+        )
+    }
+
 
     // Replace all the weird new line stuff with \n
     sanitize = (text) => {
@@ -7,14 +44,12 @@ export default class Renderer {
         return song_text_sanitised;
     }
 
-    parseBook = (text) => {
+
+    parseBook = (text,classes) => {
         const sanitized_text = this.sanitize(text);
 
         //$1 means songs 1
         const song_blocks = sanitized_text.split('$');
-        
-
-
         
         //Check each block starts with a number
         return (
@@ -25,15 +60,14 @@ export default class Renderer {
     }
 
     parseSongBlock = (song_block, itr) => {
-        
+    
         //The first line of the block should be the index number
+        const firstLineSplit = song_block.split('\n')
+        const firstLine = firstLineSplit[0];
 
-        const firstLine = song_block.split('\n')[0];
-
-        const song_text = song_block.replace(/^[0-9]+\n/, '\n')
-
-
-        console.log("song_block", song_block);
+        const song_text = song_block.replace(firstLine, '');
+        
+        console.log(song_block, firstLine, song_text);
 
         if (firstLine.search( /^\d/ig) > -1 ){ 
             return ( 
@@ -49,8 +83,6 @@ export default class Renderer {
             {this.parseSong(song_block)}
             </>
         );
-
-
     }
 
     parseSong = (song_text) =>{

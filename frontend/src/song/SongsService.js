@@ -1,10 +1,5 @@
 import axios from 'axios';
-
-
 import localforage from 'localforage';
-
-// import PouchDB from 'pouchdb'
-
 import SongWorker from './SongWorker';
 
 const songWorker = new SongWorker();
@@ -18,8 +13,6 @@ const songsTable = localforage.createInstance({
 });
 const lang = "english";
 
-// var songDB = new PouchDB('songs');
-
 export default class SongsService {
 
     static songs = [];
@@ -31,13 +24,7 @@ export default class SongsService {
 
         // Check if we have it in memory. If so, send it
         if( SongsService.songs && SongsService.songs.length > 0 ){
-
             return SongsService.songs;
-            console.log("found in memory");
-            const myPromise = new Promise((resolve, reject) => {
-                resolve(SongsService.songs)
-              });
-            return myPromise;
         }
         // Second, check if its in local database. 
         const length = await songsTable.length().then( length => length);
@@ -47,7 +34,7 @@ export default class SongsService {
 
             console.log("FETCH from online", length);
             
-            const songs = songWorker.getSongs().then( songs => {
+            songWorker.getSongs().then( songs => {
                 //Get the list of songs from the database
                 //Update the local copy
                 songs.forEach( s => {

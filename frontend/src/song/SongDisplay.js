@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 import SongsService from './SongsService';
 
-import Renderer from './Renderer'
+import Parser from './Parser'
 
 const songsService = new SongsService();
-const renderer = new Renderer();
+const parser = new Parser();
 
 class SongDisplay extends Component {
     constructor(props){
@@ -104,9 +104,9 @@ class SongDisplay extends Component {
             song_text = this.state.song.lyrics
         }
 
-        return renderer.parseSong(song_text);
+        return parser.parseSong(song_text);
     }
-    
+
     render() {
         if(this.props.widescreen){
             // console.log("return a")

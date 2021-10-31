@@ -6,9 +6,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'font-awesome/css/font-awesome.min.css';
 
+import { BrowserRouter } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import {BookPrinterPage} from './components/BookPrinterPage'
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+
+    <Route path="/printer/print/:id" exact component={BookPrinterPage} />
+    <Route path="/"  component={App} />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
