@@ -11,3 +11,4 @@ class BookAdmin(admin.ModelAdmin):
 admin.site.register(Song, SongAdmin)
 admin.site.register(Book, BookAdmin)
 admin.site.register(BookSong)
+admin.site.register(PrintPage)

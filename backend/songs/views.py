@@ -99,3 +99,17 @@ def edit_book(request, id):
     book.save()
 
     return JsonResponse({ "content": "success"}, status=200)
+
+def get_status(request):
+
+    number_of_songs = Song.objects.count()
+    number_of_books = Book.objects.count()
+    number_of_booksong = BookSong.objects.count()
+
+
+    return JsonResponse({
+        "content":"success",
+        "songs":number_of_songs,
+        "books":number_of_books,
+        "booksongs":number_of_booksong
+    }, status=200)

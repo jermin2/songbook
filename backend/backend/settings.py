@@ -139,10 +139,12 @@ REST_FRAMEWORK = {
     )
 }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
 }
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'https://songbase.life'
 ]
+
+CORS_ALLOW_CREDENTIALS = True
