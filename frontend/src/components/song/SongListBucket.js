@@ -32,9 +32,14 @@ export const Bucket = (data) => {
                 card.index = ind;
                 ind++;
               })
-              data.updateList(cards);
+
           // eslint-disable-next-line
           }, [cards])
+
+          //Only want to update when item is dropped
+        const callUpdateOnDrop = useCallback( () => {
+            data.updateList(cards);
+        }, [cards]);
 
         const moveCard = useCallback((dragIndex, hoverIndex) => {
             const dragCard = cards[dragIndex];
@@ -47,10 +52,10 @@ export const Bucket = (data) => {
         }, [cards]);
         const renderCard = (card, index) => {
             
-            return (<Card key={card.id} index={index} id={card.id} text={card.title} moveCard={moveCard}/>);
+            return (<Card key={card.song_id} index={index} id={card.song_id} text={card.title} moveCard={moveCard} update={callUpdateOnDrop}/>);
         };
         return (<>
-				<div style={style}>{cards.map((card, i) => renderCard(card, i))}</div>
+				<div key="a" style={style}>{cards.map((card, i) => renderCard(card, i))}</div>
 			</>);
     
 };

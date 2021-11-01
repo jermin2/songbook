@@ -8,7 +8,7 @@ const style = {
     backgroundColor: 'white',
     cursor: 'move',
 };
-export const Card = ({ id, text, index, moveCard }) => {
+export const Card = ({ id, text, index, moveCard, update }) => {
     const ref = useRef(null);
     const [{ handlerId }, drop] = useDrop({
         accept: ItemTypes.CARD,
@@ -16,6 +16,9 @@ export const Card = ({ id, text, index, moveCard }) => {
             return {
                 handlerId: monitor.getHandlerId(),
             };
+        },
+        drop(item, monitor){
+            update();
         },
         hover(item, monitor) {
             if (!ref.current) {

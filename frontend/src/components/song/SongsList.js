@@ -92,7 +92,6 @@ export const SongsList = (data) => {
         }
         // Get other data like title and text for each song
         songHelper.addSongData(data.book.songs).then( result => {
-            console.log("Loaded ", result.length, " songs" );
             setSongs(result);
         })
         

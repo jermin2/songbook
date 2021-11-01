@@ -35,7 +35,6 @@ export const BookEdit = (data) => {
 
     function updateSongOrder(newList){
         if(!newList || newList.length===0) return;
-        console.log("update song order TODO", newList)
         const newbook =  {...book, songs:newList}
         setBook(newbook)
     }
