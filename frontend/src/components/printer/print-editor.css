@@ -1,0 +1,40 @@
+.song-viewer {
+    width: fit-content;
+    border: 2px solid black;
+    padding: 20px;
+    background: lightgrey;
+}
+.buttonrow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content:space-evenly;
+    padding: 20px 0;
+}
+.parent {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+}
+.editorStyle {
+    height: 20%;
+    max-height: 200px;
+}
+.editorParent {
+    max-width: 600px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+.editorLyrics {
+    flex-grow: 1
+}
+.viewerParent {
+    width: 50%;
+    margin: 0 10px;
+}
+
+textarea {
+    padding: 15px;
+}
