@@ -90,7 +90,6 @@ export const SongsList = (data) => {
                 // if( songs.length === data.book.songs.length || !data.book) return
             if(!data.book || data.book.songs.length === 0) return;
         }
-        console.log(data.book);
         // Get other data like title and text for each song
         songHelper.addSongData(data.book.songs).then( result => {
             console.log("Loaded ", result.length, " songs" );
@@ -234,6 +233,7 @@ export const SongsList = (data) => {
         </div>
         )
     }
+
     // For all other modes, return this
     return (      
         

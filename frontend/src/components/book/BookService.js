@@ -112,6 +112,7 @@ export default class BookService {
 
     updateBook(book){
         bookWorker.updateBook(book).then( response => {
+            console.log(book);
             booksTable.setItem(book.book_id.toString(), book);
             alert("Success");}
          ).catch(e => {

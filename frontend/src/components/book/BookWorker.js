@@ -41,7 +41,6 @@ export default class BookWorker {
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
         return axios.put(url,book, headers).then(response => {
-            alert("Success");
             return (response);
         }).catch(e => {
             console.log(e);

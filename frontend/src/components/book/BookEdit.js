@@ -22,6 +22,13 @@ export const BookEdit = (data) => {
     },[data.match.params]);
 
     function handleClick() {
+        //we need to increment each book index, since it is 0 based
+        //might as well strip out the lyrics and title so we don't need to send so much
+        for (const s of book.songs){
+            s.index = s.index + 1;
+            delete s.lyrics;
+            delete s.title;
+        }
         bookService.updateBook(book);
         data.history.push(`/book/${book.book_id}`);
     }
