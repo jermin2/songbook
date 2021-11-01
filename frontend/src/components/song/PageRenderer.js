@@ -5,7 +5,7 @@ import Parser from './Parser'
 
 const parser = new Parser();
 const MAX_COLUMNS = 2;
-
+const MODE = 'VERSE_MODE'
 
 
 /*
@@ -33,32 +33,65 @@ export const PageRenderer = (data) => {
     // Write the block into the Area. If it overflows, undo the actions, 
     // Create a new area, and write it into there
     useEffect( () => {
-        if(!lyrics || lyrics.length < 1) return;
-        // Break on song blocks. Keep song blocks together
-        const song_blocks = lyrics.split('$');
+
+        if(! data.lyrics ||  data.lyrics.length < 1) return;
 
         let curPageId = 1
         let curAreaId = 1
 
-        // For each block
-        song_blocks.forEach( block => {
-            // console.log("writing to: ", curPageId, curAreaId);
+        // handle print options \a for new area 
+        const splits = data.lyrics.split(/(\\a)/g);
+
+        for(const lyric_block of splits){
+
+            // Check for print options \a. If found, add a new area
+            if (lyric_block.startsWith('\\a')){
+                var [e, curAreaId_t, curPageId_t] = getNewArea(curAreaId, curPageId)
+                curPageId = curPageId_t;
+                curAreaId = curAreaId_t;
+
+            } else {
+
+                // Break on song blocks. Keep song blocks together
+                if(MODE==="SONG_MODE"){
+                    const song_blocks = lyric_block.split('$');
+                    render(song_blocks, createSongBlock);
+                } else { // verse mode
+                    const verse_block = lyric_block.split('\n\n');
+                    [curAreaId, curPageId ] = render(verse_block, createSongBlock, curAreaId, curPageId );
+                }
+
+            }
+        }
+
+
+
+        
+    // eslint-disable-next-line    
+    },[data])
+
+
+    function render(objList, htmlCreateObj, curAreaId, curPageId ){
+
+
+        for (const obj of objList){
 
             // Get the area to write to
             const area = document.getElementById(`page-${curPageId}-area-${curAreaId}`);
 
             // Create the line element
-            const blockObj = createBlock(block);
+            const htmlObj = htmlCreateObj(obj);
+            if(!area) continue;
 
             // append the line element
-            area.append(blockObj);
+            area.append(htmlObj);
 
             // check for overflow
             if (area.scrollHeight > area.offsetHeight){
                 // console.log("overflow")
 
                 //Remove the overflowing object
-                area.removeChild(blockObj);
+                area.removeChild(htmlObj);
 
                 // Get a new area
                 var [e, curAreaId_t, curPageId_t] = getNewArea(curAreaId, curPageId)
@@ -66,11 +99,13 @@ export const PageRenderer = (data) => {
                 curPageId = curPageId_t;
 
                 // Add the overflow object to new area
-                e.append(blockObj);
+                e.append(htmlObj);
             }
-        })
-    // eslint-disable-next-line    
-    },[lyrics])
+        }
+        return [curAreaId, curPageId ]
+
+
+    }
 
     /**
      * @param {String} HTML representing a single element
@@ -83,19 +118,28 @@ export const PageRenderer = (data) => {
         return template.content.firstChild;
     }
 
-    /**
-     * Converts song_block text into DOM element. Calls the respective function in Parser
-     * @param {String} song_block String containing data for a song. 
-     * @returns a DOM element representing the song
-     */
-    function createBlock(song_block){
-        const b = parser.parseSongBlock(song_block)
+    // /**
+    //  * Converts song_block text into DOM element. Calls the respective function in Parser
+    //  * @param {String} song_block String containing data for a song. 
+    //  * @returns a DOM element representing the song
+    //  */
+    function createSongBlock(song_block){
+        const b = parser.parseSongBlockWithIndex(song_block)
         // turn React to markup
         const staticElement = renderToStaticMarkup(b)
         // convert from HTML to element
         const block = htmlToElement(staticElement);
         return block;
     }
+
+    // function createVerseBlock(verse_block){
+    //     const b = parser.parseSongBlock(song_block)
+    //     // turn React to markup
+    //     const staticElement = renderToStaticMarkup(b)
+    //     // convert from HTML to element
+    //     const block = htmlToElement(staticElement);
+    //     return block;
+    // }
 
     /**
      * Returns a new DOM page element. Updates the current ID to match the new element
@@ -155,7 +199,6 @@ export const PageRenderer = (data) => {
         document.getElementById(`page-${curPage}`).append(e);
         return [e, curArea, curPage]
     }
-
     return (
         <div id="viewer-parent">
             <div id={`page-1`} className={"page"}>

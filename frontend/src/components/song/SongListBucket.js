@@ -20,10 +20,15 @@ export const Bucket = (data) => {
             if(cards.length === 0 || data.songs.length !== base_cards.length){
                 setCards(data.songs);
                 setBaseCards(data.songs);
+                
             } // don't need to update if it is the same
             else if(base_cards.length === data.songs.length){}
          // eslint-disable-next-line   
           },[data.songs.length] );
+
+          useEffect( () => {
+            data.updateList(cards);
+          },[base_cards])
 
           // only update if cards change (due to order changing)
           useEffect( ()=> {

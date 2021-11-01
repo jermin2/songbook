@@ -20,7 +20,7 @@ export default class AuthService {
         sessionStorage.clear("token");
     }
 
-    relogin(){
+    async relogin(){
         if(sessionStorage.getItem("token")){
             const url = `${API_URL}/api/token/verify/`;
             const token = { token: sessionStorage.getItem('token') }

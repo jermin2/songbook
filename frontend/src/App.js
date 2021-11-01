@@ -40,9 +40,9 @@ class App extends Component {
     this.toggleShowNewBook = this.toggleShowNewBook.bind(this);
   
     //Attempt login
-    authService.relogin().then( loggedIn => {
-      this.setState({userLoggedIn:loggedIn});
-    });
+    authService.relogin().then( res => {
+      if(res) this.setState({userLoggedIn:true})
+    })
   }
 
   toggleShowNewBook() {

@@ -9,7 +9,6 @@ export default class PrinterService {
         // const token = sessionStorage.getItem("token");
         // const headers = { headers: {"Authorization": `Bearer ${token}`}, }
         return axios.post(url,page).then(response => {
-            console.log(response.data);
             alert("New Print Settings Created");
             return response.data;}
          ).catch(e => {
@@ -46,7 +45,6 @@ export default class PrinterService {
     get(id){
         const url = `${API_URL}/api/printer/${id}/`;
         return axios.get(url).then(response => {
-            console.log(response.data);
             alert("success");
             return response.data
         })

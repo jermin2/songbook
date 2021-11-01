@@ -45,9 +45,9 @@ export default class Parser {
     }
 
 
-    parseBook = (text,classes) => {
+    parseBook = (text) => {
         const sanitized_text = this.sanitize(text);
-
+        
         //$1 means songs 1
         const song_blocks = sanitized_text.split('$');
         
@@ -59,20 +59,51 @@ export default class Parser {
         )
     }
 
+    parseSongBlockWithIndex = (song_block, itr) => {
+        if(song_block.startsWith('$')){
+
+            //find the index
+            const match_results = song_block.match(/\$(\d)+/) 
+
+            if(match_results===null) {
+                console.log(match_results, song_block, "match results");
+                // console.log(match_results[0].length, match_results[1].length, "match results");
+                return;
+            }
+
+            const song_num = match_results[1]// the [1] is to get the capture group
+            //slice to get the rest of the song
+            const len = match_results[0].length
+            const new_song_block = song_block.slice(len)
+
+            return ( 
+                <div className="book-song" key={itr}>
+                <div className="song-number" key={`${itr}`}>{song_num}</div> 
+                {this.parseSong(new_song_block)}
+                <div className="line" key={`g-${itr}`}>&nbsp;</div>
+                </div>
+                ); 
+    }    else return (
+            <>
+            {this.parseSong(song_block)}
+            </>
+        );
+    }
     parseSongBlock = (song_block, itr) => {
-    
+
         //The first line of the block should be the index number
         const firstLineSplit = song_block.split('\n')
         const firstLine = firstLineSplit[0];
 
         const song_text = song_block.replace(firstLine, '');
 
-
+        // if the first line starts with $1 (this means it is a song index)
         if (firstLine.search( /^\d/ig) > -1 ){ 
             return ( 
             <div className="book-song" key={itr}>
             <div className="song-number" key={`${itr}`}>{firstLine}</div> 
             {this.parseSong(song_text)}
+            <div className="line" key={`g-${itr}`}>&nbsp;</div>
             </div>
             ); 
         } 
@@ -85,6 +116,8 @@ export default class Parser {
     }
 
     parseSong = (song_text) =>{
+
+        
 
         // if song_text doesn't exist, then return
         if (!song_text) return <div></div>

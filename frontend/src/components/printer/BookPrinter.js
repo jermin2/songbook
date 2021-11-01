@@ -18,38 +18,36 @@ export const BookPrinter = (data) => {
     const [lyrics, updateLyrics] = useState("");
     const [style, updateStyle] = useState("");
     const [styleSheet, setStyleSheet] = useState("")
-
+    const [printObject, setPrintObject] = useState([]);
     const [id, setId] = useState();
 
 
     useEffect( () => { 
-        console.log(data);
         const { match: { params } } =  data;
 
         if(params && params.id){
             setId(params.id);
             printerService.get(params.id).then( response => {
-                console.log(response)
                 updateLyrics(response.lyrics);
                 updateStyle(response.style);
+                setPrintObject(response);
                 document.getElementById('style').value = response.style;
                 document.getElementById('lyrics').value = response.lyrics;
                 handleStyle();
-                handleRender();
             })
         }
         // eslint-disable-next-line
-    },[data])
+    },[])
 
     function handleSave(){
         const page = {
             lyrics: lyrics,
             style: style,
-            id: id
+            id: id,
+            name: printObject.name
         }
-        console.log(page, id);
         if(id){
-            console.log("i have an id")
+            console.log(page);
             printerService.save(page, id)
         }else {
             printerService.create(page).then( response => {
@@ -64,6 +62,10 @@ export const BookPrinter = (data) => {
     }
 
     function handleStyle(){
+        //Update lyrics
+        const lyrics = document.getElementById('lyrics').value;
+
+        updateLyrics(lyrics);
         
         //Remove old style sheet if exist
         if(styleSheet.length !== 0 ){
@@ -77,13 +79,8 @@ export const BookPrinter = (data) => {
         console.log("inject css", sheet);
         setStyleSheet(sheet)
 
-        handleRender()
     }
 
-    function handleRender(){
-        const lyrics = document.getElementById('lyrics').value;
-        updateLyrics(lyrics);
-    }
 
     return (
         
@@ -100,8 +97,7 @@ The following options are available:
 .line {}
 "></textarea>
                     <div className="buttonrow">
-                        <button className="btn btn-warning" onClick={handleStyle}>Add Styling</button>
-                        <button className="btn btn-primary" onClick={handleRender}>Render</button>
+                        <button className="btn btn-warning" onClick={handleStyle}>Preview</button>
                         <button className="btn btn-success" onClick={handleSave}>Save</button>
                         <button className="btn btn-info" onClick={handlePrint}>Print</button>
                         

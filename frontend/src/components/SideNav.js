@@ -6,6 +6,7 @@ import BookList from './book/BookList'
 import {withRouter} from 'react-router-dom'
 
 import './SideNav.css';
+import localforage from 'localforage';
 
 class SideNav extends Component {
     constructor(props) {
@@ -72,7 +73,9 @@ class SideNav extends Component {
                     <div className="nav-item">Books</div>
                     
                     < BookList toggleSideNav={this.toggleSideNav}/>
-                    <div className="nav-item" onClick={ ()=> this.toPrinter()}>Printer</div>
+                    { this.props.userLoggedIn &&
+                    <div className="nav-item" onClick={ ()=> this.toPrinter()}>Printer</div> }
+
                 </div>
             </div>
             
