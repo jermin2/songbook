@@ -21,10 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a9&e@8+l)n!wa3r#wkuj5db=e%6$k2&nroc#38%a98ok*!amz$'
-
+# SECRET_KEY = 'django-insecure-a9&e@8+l)n!wa3r#wkuj5db=e%6$k2&nroc#38%a98ok*!amz$'
+import os
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','django-insecure-a9&e@8+l)n!wa3r#wkuj5db=e%6$k2&nroc#38%a98ok*!amz$' )
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = False
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = []
 
@@ -143,8 +145,7 @@ SIMPLE_JWT = {
 }
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'https://songbase.life'
+    'http://localhost:3000'
 ]
 
 CORS_ALLOW_CREDENTIALS = True

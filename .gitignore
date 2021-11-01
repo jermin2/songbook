@@ -1,4 +1,5 @@
-backend/db.sqlite3
 frontend/src/song/SongListOld.js
 frontend/src/book/bookeditold
-printer/
+printerApp/
+printer/node_modules
+printer/package-lock.json
