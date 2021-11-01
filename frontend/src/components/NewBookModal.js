@@ -9,7 +9,7 @@ const bookService = new BookService();
 
 export default function NewBookModal(props) {
   // Declare a new state variable, which we'll call "count"
-  const [title, setTitle] = useState("");
+  const [name, setTitle] = useState("");
   const [show, setShow] = useState(props.show);
 
   useEffect( () => {
@@ -17,7 +17,7 @@ export default function NewBookModal(props) {
   },[props.show]);
 
   function handleSave(){
-      bookService.createBook({title: title});
+      bookService.createBook({name: name});
       props.toggleShow();
   };
 
@@ -28,7 +28,7 @@ export default function NewBookModal(props) {
     <Modal.Body>
     <Form id="newBook">
         <Form.Group className="mb-3" controlId="formBookTitle">
-        <Form.Control type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="Enter Title"/>
+        <Form.Control type="text" value={name} onChange={e => setTitle(e.target.value)} placeholder="Enter Title"/>
         </Form.Group>
     </Form>
     </Modal.Body>

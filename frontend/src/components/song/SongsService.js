@@ -1,10 +1,8 @@
-import axios from 'axios';
 import localforage from 'localforage';
 import SongWorker from './SongWorker';
 
 const songWorker = new SongWorker();
 
-const API_URL = 'http://localhost:8000';
 
 // use the songs table
 const songsTable = localforage.createInstance({
@@ -14,19 +12,44 @@ const songsTable = localforage.createInstance({
 const lang = "english";
 
 export default class SongsService {
+    constructor(){
+    if (SongsService._instance) {
+        return SongsService._instance
+      }
+      SongsService._instance = this;
 
-    static songs = [];
+      this.checkUpdate();
+    }
+
+    songs = [];
+
+    async checkUpdate(){
+        const remoteStats = await songWorker.getUpdate();
+        const length = await songsTable.length().then( length => length);
+        if(length !== remoteStats.songs){
+            console.log("update!", length, remoteStats.songs);
+            songWorker.fetchSongs().then( songs => {
+                //Get the list of songs from the database
+                //Update the local copy
+                songs.forEach( s => {
+                    songsTable.setItem(s.song_id.toString(), s);
+                })
+            })
+        }
+    }
 
     async getSongs() {
+        
+
         console.log("Get songs called");
         // Check database version, if its different then update
         //write to localforage songsWorker.getSongs();
 
         // Check if we have it in memory. If so, send it
-        if( SongsService.songs && SongsService.songs.length > 0 ){
-            return SongsService.songs;
+        if( this.songs && this.songs.length > 0 ){
+            return this.songs;
         }
-        // Second, check if its in local database. 
+        // Second, check if we have a local copy
         const length = await songsTable.length().then( length => length);
 
         // if not, then download from remote database
@@ -34,18 +57,17 @@ export default class SongsService {
 
             console.log("FETCH from online", length);
             
-            songWorker.getSongs().then( songs => {
+            songWorker.fetchSongs().then( songs => {
                 //Get the list of songs from the database
                 //Update the local copy
-                songs.forEach( s => {
-                    songsTable.setItem(s.song_id.toString(), s);
-                })
-                console.log("Finished updating");
+                for (const song of songs){
+                    songsTable.setItem(song.song_id.toString(), song);
+                }
+
                 return this.getSongsFromLocal();
             })
 
         } else {
-            console.log("found in local database")
             const songs = await this.getSongsFromLocal();
             return songs;
         }
@@ -64,7 +86,7 @@ export default class SongsService {
             }
             
         }).then(function() {
-            console.log('Retrieved data from local', songs.length);
+            console.log('Loaded ', songs.length, " songs from database");
             //Store into memory
             SongsService.songs = songs;
             
@@ -79,55 +101,59 @@ export default class SongsService {
     }
 
 
-
-
-
-
-    getSong(id){
-        console.log("id", id);
-        return songsTable.getItem(id.toString()).then( result => {console.log("ii", result); return result}).catch(e => console.log(e) );
+    async getSong(id){
+        // Check if song exists in local database.
+        // If not, retrieve it from the remote database
+        const s = await songsTable.getItem(id.toString());
+        
+        if(s){ return s;
+        } else {
+            // Try to retrieve from remote
+            return await songWorker.fetchSong(id).then( response => {
+                songsTable.setItem(response.song_id.toString(), response.song_id)
+                return response;
+            }).catch ( e => {
+                console.log(e);
+                return {title:"This song doesn't exist", lyrics:"Are you sure you typed it in right?"}
+            })
+        }
     }
 
     deleteSong(id){
-        const url = `${API_URL}/api/song/${id}`;
-        const token = sessionStorage.getItem("token");
-        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-        return axios.delete(url, headers).then(response => {
-            console.log(response.data);
-            alert("Success");}
-         ).catch(e => {
+        songWorker.deleteSong(id).then( response => {
+            alert("Song Deleted");
+            songsTable.removeItem(id);
+        }).catch(e => {
             console.log(e);
             alert("An error occured");
         });
     }
 
     createSong(song){
-        const url = `${API_URL}/api/song/`;
-        const token = sessionStorage.getItem("token");
-        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-        return axios.post(url,song, headers).then(response => {
-            console.log(response.data);
-            songsTable.setItem(response.data.song_id.toString(), response.data)
-            alert("Success");}
-         ).catch(e => {
+        return songWorker.createSong(song).then( response => {
+            console.log(response);
+            songsTable.setItem(response.song_id.toString(), response)
+            alert("Success");
+            return response
+        }).catch(e => {
             console.log(e);
             alert("An error occured");
         })
     }
 
     updateSong(song){
-        const url = `${API_URL}/api/song/${song.song_id}/edit`;
-        const token = sessionStorage.getItem("token");
-        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-
-        return axios.put(url, song, headers).then(response => {
-                console.log(response.data);
-                songsTable.setItem(response.data.song_id.toString(), response.data)
-                alert("Success");}
-             ).catch(e => {
-                console.log(e);
-                alert("An error occured");
-            })
+        return songWorker.updateSong(song).then( response => {
+            console.log(response);
+            // update local database
+            songsTable.setItem(response.song_id.toString(), response)
+            alert("Success");
+            return response;
+        }).catch( e=> {
+            console.log(e);
+        })
     }
+
+
+
 
 }

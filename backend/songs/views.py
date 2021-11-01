@@ -87,7 +87,7 @@ def edit_book(request, id):
         print(songObj)
         s = Song.objects.get(song_id=songObj.get('song_id'))
         print(s.title)
-        BookSongs.objects.create(
+        BookSong.objects.create(
             book_id=book,
             song_id=s,
             index=index

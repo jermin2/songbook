@@ -33,7 +33,6 @@ export const SongsList = (data) => {
 
             if(scrollTop + (clientHeight*1.5) > scrollHeight){
                 if(songLimit<4000){
-                console.log("set limit", songLimit);
                 setSongLimit(songLimit+100);
             }
         }
@@ -41,12 +40,10 @@ export const SongsList = (data) => {
 
     const mainScroll = (e) =>{
         const { scrollTop, scrollHeight, clientHeight } =  e.target;
-        // console.log(scrollTop, scrollHeight, clientHeight)
 
         if(mode!== BOOK_LIST){
             if(scrollTop+(clientHeight*2) >= scrollHeight) {
                 if(songLimit<4000){
-                    console.log("increase limit main", songLimit);
                     setSongLimit(songLimit+100);
                 }
                 
@@ -82,23 +79,21 @@ export const SongsList = (data) => {
 
     // Change modes
     useEffect( () => {
-        console.log("mode changed to: ", data.mode);
         setMode(data.mode);
     },[data.mode])
     
     // What to do if a book is given / changed
     useEffect( () => {
         if(!data.book || !data.book.songs || data.book.book_id===-1) return;
-        console.log("change in book", mode, data.book);
         if(data.mode === BOOK_EDIT) {
                 // If the song and book lengths are the same do nothing
                 // if( songs.length === data.book.songs.length || !data.book) return
             if(!data.book || data.book.songs.length === 0) return;
         }
-        
+        console.log(data.book);
         // Get other data like title and text for each song
         songHelper.addSongData(data.book.songs).then( result => {
-            console.log("songs changed", result );
+            console.log("Loaded ", result.length, " songs" );
             setSongs(result);
         })
         
@@ -118,8 +113,6 @@ export const SongsList = (data) => {
             selSong.selected = true;
         })
 
-
-        
         setSongs(newSongList);
 
         // eslint-disable-next-line
@@ -148,7 +141,6 @@ export const SongsList = (data) => {
 
             songHelper.filterByIndexes(parseInt(searchTerm)).then(result => {
                 list = result;
-                console.log("index search", list);
                 setFiltered(list);
                 return;
             });
@@ -180,7 +172,6 @@ export const SongsList = (data) => {
 
 
     function handleClick(id) {
-        console.log(mode, id, songs);
         if(mode===BOOK_LIST){
             // BOOK LIST mode means we just want to return the id, and let the parent handle the click
             data.setId(id);
@@ -215,36 +206,25 @@ export const SongsList = (data) => {
     };
 
     function searchFilter(song) {
-        //if the search term is a number
-        if(!isNaN(searchTerm) && searchTerm.length>0){
-            // Search using the index
-            // ONLY VALID during SONG_LIST and EDIT_BOOK_SELECT modes
-            // console.log("song", song);
-            const [r,bookname] = songHelper.filterByIndex(parseInt(searchTerm), song);
-            song.booksong=bookname;
-            return r;
-            
-        } else {
 
-            // remove any chords and comments - TODO: Can we do this before hand?
-            const searchString = song.lyrics.replace(/\[(.*?)\]/img, "") //remove chords
-            .replace(/#[\s\S]+?$/gim, "") //remove comments
-            .replace(/(\n\r)+|(\r\n)+|\n+/img, " ") //remove new lines
-            .replace(/[^a-z0-9 ]+/img, ); //remove punctuation
+        // remove any chords and comments - TODO: Can we do this before hand?
+        const searchString = song.lyrics.replace(/\[(.*?)\]/img, "") //remove chords
+        .replace(/#[\s\S]+?$/gim, "") //remove comments
+        .replace(/(\n\r)+|(\r\n)+|\n+/img, " ") //remove new lines
+        .replace(/[^a-z0-9 ]+/img, ); //remove punctuation
 
-            // search through the string (the 'i' flag means case insensitive)
-            if (searchString.search( new RegExp(searchTerm, 'img') ) !== -1){
-                return true;
-            }
-            return false;   
-        }     
+        // search through the string (the 'i' flag means case insensitive)
+        if (searchString.search( new RegExp(searchTerm, 'img') ) !== -1){
+            return true;
+        }
+        return false;   
+         
     };
 
     if (!songs || songs.length===0){
         return <>NO SONGS</>
     }
     if(mode === 'BOOK_EDIT') {
-        console.log(filtered.length, "num songs", songs.length);
         return(
         <div className="song-list">
             <input className="search" onChange={handleChange()} autoFocus placeholder="Type to search"/>

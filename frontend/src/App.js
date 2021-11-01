@@ -14,9 +14,7 @@ import {BookPrinterPage} from './components/printer/BookPrinterPage'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
-import LoginModal from "react-login-modal";
-
-import Modal from 'react-bootstrap/Modal';
+import LoginModal from "./components/LoginModal";
 
 import NewBookModal from './components/NewBookModal'
 import SideNav from './components/SideNav'
@@ -29,6 +27,7 @@ class App extends Component {
   
   constructor(props){
     super(props);
+
     this.state = {
       showLogin: false,
       userLoggedIn: false,
@@ -39,7 +38,11 @@ class App extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.toggleShowNewBook = this.toggleShowNewBook.bind(this);
-    
+  
+    //Attempt login
+    authService.relogin().then( loggedIn => {
+      this.setState({userLoggedIn:loggedIn});
+    });
   }
 
   toggleShowNewBook() {
@@ -90,7 +93,7 @@ class App extends Component {
           <h1 className="title"><Link to="/">Song Book</Link></h1>
 
           <div className="content">
-            <Route path="/" exact render={(props) => <SongsList {...props} mode={'SONG_LIST'} />} />
+            <Route path="/" exact render={(props) => <SongsList {...props} mode={'SONG_LIST'} />} /> 
             <Route path="/song/:id/edit" component={SongEdit} />
             <Route path="/book/:id/edit"  component={BookEdit} />
             <Route path="/add/song" exact component={SongEdit} />
@@ -98,31 +101,23 @@ class App extends Component {
             <Route path="/printer/" exact render={(props) => <PrinterList {...props} userLoggedIn={this.state.userLoggedIn} />} />
             <Route path="/print/:id" exact component={BookPrinterPage} />
             <Route path="/song/:id" exact render={(props) => <SongDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
-            {/* <Route path="/book/:id" exact component={BookDisplay} /> */}
             <Route exact path="/book/:id" render={(props) => <BookDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
 
           </div>
         </div>
       </div>
-
-      <div>
-      <button onClick={this.login}>Click me</button>
-      <button onClick={this.checkLogin}>Then click me</button>
-      <button onClick={this.logout}>Logout</button>
-      </div>
-
-      <Modal show={this.state.showLogin}>
-        <LoginModal
-          handleSignup={this.handleSignup}
+    
+      <LoginModal show={this.state.showLogin}
           handleLogin={this.handleLogin}
         />
-        <button onClick={this.toggleLogin}>Close</button>
-      </Modal>
-      <NewBookModal show={this.state.showNewBook} toggleShow={this.toggleShowNewBook}/>
+      <NewBookModal show={this.state.showNewBook} toggleShow={this.toggleShowNewBook}/> 
       </BrowserRouter>
       </DndProvider>
     )
   }
 }
+
+
+
 
 export default App;

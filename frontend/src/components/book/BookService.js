@@ -1,80 +1,70 @@
-import axios from 'axios';
-
-
+import BookWorker from './BookWorker'
 import localforage from 'localforage';
 
-const API_URL = 'http://localhost:8000';
+const bookWorker = new BookWorker();
 
 // use the books table
 const booksTable = localforage.createInstance({
     name: "songbaseDB",
     storeName: "books"
 });
-// use the bookksongs table
-const bookSongsTable = localforage.createInstance({
-    name: "songbaseDB",
-    storeName: "booksongs"
-});
+
+
 const lang = "english";
 
-
 export default class BookService {
+    constructor(){
+        if (BookService._instance) {
+            return BookService._instance
+          }
+          BookService._instance = this;
 
-    static books = [];
-    static booksongs = [];
+          this.checkUpdate();
+    }
 
-    getBooks() {
-        console.log("get books called");
-        //Check if we have it in memory
-        if (BookService.books && BookService.books.length > 0) {
-            console.log("found in memory");
-            const myPromise = new Promise((resolve, reject) => {
-                resolve(BookService.books)
-              });
-            return myPromise;
-        }
-        //Check if we ahve it in local storage
-        booksTable.length().then( length => {
-            if(length === 0){
-                //Download from remote
-                console.log("Fetch list");
-                this.fetchBooks().then( books => {
+    books = [];
 
-                    //Store in local storage
-                    books.forEach( book => {
-                        booksTable.setItem( book.book_id.toString(), book)
-                    })
+    async checkUpdate(){
+        const remoteStats = await bookWorker.getUpdate();
+
+        const length = await booksTable.length().then( length => length);
+        if(length !== remoteStats.books){
+            console.log("updating books...!", length, remoteStats.books);
+            bookWorker.fetchSongs().then( books => {
+                //Get the list of songs from the database
+                //Update the local copy
+                this.books = books;
+                books.forEach( b => {
+                    booksTable.setItem(b.book_id.toString(), b);
                 })
-            }
-        })
-
-        // Iterate over local database (it should've synced)
-        const books = [];
-        return booksTable.iterate(function(value, key, iterationNumber) {
-            
-            // only get for the language setting
-            if(value.lang === lang) {
-                books.push(value);
-            }
-            
-        }).then(function() {
-            console.log('Retrieved book data from local', books.length);
-            //Store into memory
-            BookService.books = books;
-            
-            return BookService.books;
-        }).catch(function(err) {
-            // This code runs if there were any errors
-            console.log(err);
-        });
-
+            })
+        }
 
     }
 
-    fetchBooks() {
 
-        const url = `${API_URL}/api/book/`;
-        return axios.get(url).then(response => response.data).catch(e => console.log(e));
+    async getBooks() {
+        console.log("get books called");
+        //Check if we have it in memory
+        if (this.books && this.books.length > 0) {
+            return this.books;
+        }
+        //Check if we ahve it in local storage
+        const length = await booksTable.length();
+
+        if(length === 0){
+            console.log("Fetch books - this shouldn't need to be called")
+            bookWorker.fetchBooks().then( books => {
+                
+                for (const book of books) {
+                    booksTable.setItem( book.book_id.toString(), book)
+                }
+                return books.filter( e=> e.lang === lang)
+            })
+        }
+
+        // Iterate over local database (it should've synced)
+        return await this.loadBooks();
     }
 
     getBook(id){
@@ -84,71 +74,36 @@ export default class BookService {
         // return axios.get(url).then(response => response.data).catch(e => console.log(e));
     }
 
-    async getBookSongs(){
-        console.log("get song books called");
-        if(BookService.booksongs.length!== 0){
-            // Found in memory
-            return BookService.booksongs;
-        }
+    async loadBooks(){
+        const t_books = []
+        return booksTable.iterate( (value,key,iterationNumber) => {
+            t_books.push(value);
+        }).then( () => {
+            this.books = t_books;
+            return this.books.filter( e=> e.lang === lang);
+        })
 
-        //check local storage
-        const length = await bookSongsTable.length().then( result =>  { return result })
-
-        //if length is zero, then load the data into local db, then load it
-        if(length===0){
-            const t_booksongs = await this.fetchBookSongs();
-
-            //write to table
-            t_booksongs.forEach( booksong => {
-                bookSongsTable.setItem(booksong.id.toString(), booksong)
-            })
-
-            BookService.booksongs = t_booksongs;
-            return t_booksongs;
-        
-        // load the data from local db
-        } else {
-            const t_booksongs = []
-            await bookSongsTable.iterate( (value,key,iterationNumber) => {
-                t_booksongs.push(value);
-            })
-
-            BookService.booksongs = t_booksongs;
-            return t_booksongs;
-        }
-
-
-    }
-
-    fetchBookSongs(){
-        const url = `${API_URL}/api/booksongs/`;
-        return axios.get(url).then(response => response.data).catch(e => console.log(e));
     }
 
     deleteBook(id){
-        const url = `${API_URL}/api/book/${id}`;
-        const token = sessionStorage.getItem("token");
-        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-        return axios.delete(url, headers).then(response => {
-            console.log(response.data);
-            alert("Book deleted");}
-         ).catch(e => {
+        bookWorker.deleteBook(id).then( response => {
+            console.log(response);
+            booksTable.removeItem(id);
+            alert("Deleted!")
+        }).catch( e => {
             console.log(e);
-            alert("An error occured");
-        });
+        })
     }
 
     createBook(book){
-        const slug = book.name.replace(' ', '_').toLowerCase();
+        const slug = book.name.replace(/\s/g, '_').toLowerCase();
         const b = {...book, slug: slug}
-        const url = `${API_URL}/api/book/`;
-        const token = sessionStorage.getItem("token");
-        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-        return axios.post(url,b, headers).then(response => {
-            console.log(response.data);
-            booksTable.setItem(response.data.book_id.toString(), response.data);
-            alert("Success");}
-         ).catch(e => {
+
+        bookWorker.createBook(b).then( response => {
+            console.log(response);
+            booksTable.setItem(response.book_id.toString(), response);
+            alert("Success");
+        }).catch(e => {
             console.log(e, b);
             alert("An error occured");
         })
@@ -156,11 +111,8 @@ export default class BookService {
     }
 
     updateBook(book){
-        const url = `${API_URL}/api/book/${book.book_id}/edit`;
-        const token = sessionStorage.getItem("token");
-        const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-        return axios.put(url,book, headers).then(response => {
-            console.log(response.data);
+        bookWorker.updateBook(book).then( response => {
+            booksTable.setItem(book.book_id.toString(), book);
             alert("Success");}
          ).catch(e => {
             console.log(e);

@@ -76,7 +76,9 @@ class SongEdit extends Component {
     handleSave() {
         console.log(this.state.song);
         if(this.state.song.id === -1){
-            songService.createSong(this.state.song);
+            songService.createSong(this.state.song).then(response => {
+                this.props.history.push(`/song/${response.song_id}`)
+            })
         } else {
             songService.updateSong(this.state.song);
         }

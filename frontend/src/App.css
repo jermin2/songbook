@@ -228,7 +228,7 @@ div[data-selected=true] {
 
 .title-list[data-mode="BOOK_EDIT"] {
   overflow-y:scroll;
-  max-height:60vh;
+  height:60vh;
 }
 
 .printer-parent {
@@ -237,4 +237,15 @@ div[data-selected=true] {
 
 .editor, .viewer {
   width: 50%;
+}
+
+table {
+  width: 50%;
+  max-width: 500px;
+  margin: auto;
+}
+
+.heading {
+  text-align:center;
+  padding: 20px;
 }

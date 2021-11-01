@@ -48,7 +48,6 @@ class BookDisplay extends Component {
 
             //Check it is a different book than what we already have
             if (parseInt(params.id) !== this.state.book.book_id) {
-                console.log(this.state.book.book_id);
                 var self = this;
 
                 //Fetch the new book

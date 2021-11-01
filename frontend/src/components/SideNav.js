@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import HamburgerMenu from 'react-hamburger-menu'
 import BookList from './book/BookList'
 
+
 import {withRouter} from 'react-router-dom'
 
 import './SideNav.css';
@@ -35,6 +36,11 @@ class SideNav extends Component {
         this.props.history.push('/add/song');
     }
 
+    toPrinter() {
+        this.toggleSideNav();
+        this.props.history.push('/printer');
+    }
+
     render() {
         return (
             <div className="sideNav">
@@ -66,6 +72,7 @@ class SideNav extends Component {
                     <div className="nav-item">Books</div>
                     
                     < BookList toggleSideNav={this.toggleSideNav}/>
+                    <div className="nav-item" onClick={ ()=> this.toPrinter()}>Printer</div>
                 </div>
             </div>
             

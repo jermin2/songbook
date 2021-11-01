@@ -18,43 +18,42 @@ axios.defaults.baseURL = API_URL
 axios.defaults.timeout = defaultTimeout
 
 
-export default class SongWorker {
 
-    fetchSongs() {
-        const url = `${API_URL}/api/song/`;
+export default class BookWorker {
+
+    fetchBooks() {
+        const url = `${API_URL}/api/book/`;
         return axios.get(url).then(response => {
-            console.log("Fetched ", response.data.length)
+            console.log("Fetched ", response.data.length, "books")
             return response.data }).catch(e => console.log(e));
     }
 
-    fetchSong(id) {
-        const url = `${API_URL}/api/song/${id}`;
+    fetchBook(id) {
+        const url = `${API_URL}/api/book/${id}`;
         return axios.get(url).then(response => {
             console.log("Fetched ", response.data)
             return response.data }).catch(e => console.log(e));
     }
 
 
-    updateSong(song){
-        const url = `${API_URL}/api/song/${song.song_id}/`;
+    updateBook(book){
+        const url = `${API_URL}/api/book/${book.book_id}/edit`;
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-
-        return axios.put(url, song, headers).then(response => {
-            return response.data
-            }
-             ).catch(e => {
-                console.log(e);
-                alert("An error occured");
-                throw e;
-            })
+        return axios.put(url,book, headers).then(response => {
+            alert("Success");
+            return (response);
+        }).catch(e => {
+            console.log(e);
+            alert("An error occured");
+        })
     }
 
-    createSong(song){
-        const url = `${API_URL}/api/song/`;
+    createBook(book){
+        const url = `${API_URL}/api/book/`;
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
-        return axios.post(url,song, headers).then(response => {
+        return axios.post(url,book, headers).then(response => {
             return response.data;
         }
          ).catch(e => {
@@ -63,8 +62,8 @@ export default class SongWorker {
         })
     }
 
-    deleteSong(id){
-        const url = `${API_URL}/api/song/${id}`;
+    deleteBook(id){
+        const url = `${API_URL}/api/book/${id}`;
         const token = sessionStorage.getItem("token");
         const headers = { headers: {"Authorization": `Bearer ${token}`}, }
         return axios.delete(url, headers).then(response => {
@@ -86,6 +85,7 @@ export default class SongWorker {
             alert("An error occured");
         });    
     }
+
 
 
 }
