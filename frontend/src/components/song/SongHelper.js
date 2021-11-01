@@ -5,33 +5,32 @@ const songsService = new SongsService();
 
 export default class SongHelper {
     constructor(){
-        // if(SongHelper.books.length === 0) {
-        //     booksService.getBooks().then( response => {
-        //         SongHelper.books = response;
-        //     })
-        // }
+        if (SongHelper._instance) {
+            return SongHelper._instance
+          }
+          SongHelper._instance = this;
     }
-    static songs_sorted = []
+    songs_sorted = []
 
-    static books = []
+    books = []
 
     async getSortedSongList() {
-        console.log("Get Sorted Song List", SongHelper.songs_sorted);
-        if(SongHelper.songs_sorted.length===0){
+        console.log("Get Sorted Song List", this.songs_sorted);
+        if(this.songs_sorted.length===0){
             const songlist = await songsService.getSongs().then( result => {
                 result = result.sort( (s1,s2) => {
                     if(s1.title > s2.title) return 1;
                     if(s2.title > s1.title) return -1;
                     return 0;
                 });
-                SongHelper.songs_sorted = result;
-                return SongHelper.songs_sorted
+                this.songs_sorted = result;
+                return this.songs_sorted
             });
-            SongHelper.songs_sorted = songlist;
+            this.songs_sorted = songlist;
             return songlist;
 
         } else {
-            return SongHelper.songs_sorted;
+            return this.songs_sorted;
         }
     }
     // const myPromise = new Promise((resolve, reject) => {
@@ -44,15 +43,15 @@ export default class SongHelper {
         // map the (song_id) field with the sorted list of songs
 
         // Check to see if the songs have been loaded yet, if not
-        if(SongHelper.songs_sorted.length===0 ){
-        console.log("songs not ready yet", SongHelper.songs_sorted.length);
+        if(this.songs_sorted.length===0 ){
+        console.log("songs not ready yet", this.songs_sorted.length);
         
             let sorted_list = [];
             // load them
             const list = await this.getSortedSongList().then( result => {
 
                 sorted_list = result;
-                SongHelper.songs_sorted = sorted_list;
+                this.songs_sorted = sorted_list;
                 
                 const list = book_list.map( song => {
                     const s = sorted_list.find( e => e.song_id===song.song_id);
@@ -69,9 +68,9 @@ export default class SongHelper {
         }
         else{
             //Songs have loaded
-            console.log("songs have loaded", SongHelper.songs_sorted.length);
+            console.log("songs have loaded", this.songs_sorted.length);
             return book_list.map( song => {
-                const s = SongHelper.songs_sorted.find( e => e.song_id===song.song_id);
+                const s = this.songs_sorted.find( e => e.song_id===song.song_id);
                 if(!s) console.log("this should not have happened", song);
                 return {...song, title: s.title, lyrics: s.lyrics};
             })
@@ -82,7 +81,7 @@ export default class SongHelper {
     async addBookData(list){
         //Check we have book data
         var books;
-        if(SongHelper.books.length===0){
+        if(this.books.length===0){
             books = await booksService.getBooks();
         }
 

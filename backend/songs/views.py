@@ -17,17 +17,17 @@ from django.shortcuts import HttpResponse
 # Create your views here.
 class SongView(viewsets.ModelViewSet):
     serializer_class = SongSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Song.objects.all()
 
 class BookSongView(viewsets.ModelViewSet):
     serializer_class = BookSongSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = BookSong.objects.all()    
 
 class BookView(viewsets.ModelViewSet):
     serializer_class = BookSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Book.objects.all()
 
 class PrintPageView(viewsets.ModelViewSet):

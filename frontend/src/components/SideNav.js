@@ -6,7 +6,6 @@ import BookList from './book/BookList'
 import {withRouter} from 'react-router-dom'
 
 import './SideNav.css';
-import localforage from 'localforage';
 
 class SideNav extends Component {
     constructor(props) {

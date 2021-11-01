@@ -12,32 +12,6 @@ Given the right lyrics, can parse the song into React HTML elements. No styling 
 */
 export default class Parser {
 
-    checkOverflow(id){
-        var area = document.getElementById(`area-${id}`);
-
-        console.log(area);
-    }
-    // Make a new area
-    newArea = (song_block) => {
-        this.columnNumber = this.columnNumber + 1
-        this.currentArea = this.currentArea + 1;
-
-        if(this.columnNumber === this.MAX_COLUMNS){
-            this.columnNumber = 0;
-            return(
-                // Add a new page
-                <div className="page">
-                    <div className='area' id={`area-${this.currentArea}`}>{this.parseSongBlock(song_block)}</div>
-                </div>
-                )
-        }
-
-        return (
-            <div className="page" id={`area-${this.currentArea}`}>{this.parseSongBlock(song_block)}</div>
-        )
-    }
-
-
     // Replace all the weird new line stuff with \n
     sanitize = (text) => {
         var song_text_sanitised = text.replace(/(\r\n)|\r|\n/igm, '\n')
@@ -60,10 +34,28 @@ export default class Parser {
     }
 
     parseSongBlockWithIndex = (song_block, itr) => {
-        if(song_block.startsWith('$')){
 
+        //check if it starts with a new line
+        if(song_block.startsWith('\n')){
+            var text = song_block;
+            text = text.replace('\n',"")
+            return (
+                <div><div className="line" key={`g-${itr}`}>&nbsp;
+                {this.parseSongBlockWithIndex(text, itr)}</div>
+                </div>
+            )
+        }
+        if(song_block.length===0){
+            return ( <div>
+                <div className="line" key={`g-${itr}`}>&nbsp;</div>
+                <div className="line" key={`g-${itr+1}`}>&nbsp;</div>
+                </div>
+            );
+        }
+        if(song_block.startsWith('$')){
             //find the index
-            const match_results = song_block.match(/\$(\d)+/) 
+            const match_results = song_block.match(/\$(\d)+/);
+            // console.log(match_results); 
 
             if(match_results===null) {
                 console.log(match_results, song_block, "match results");
@@ -76,12 +68,12 @@ export default class Parser {
             const len = match_results[0].length
             const new_song_block = song_block.slice(len)
 
-            return ( 
+            return ( <>
                 <div className="book-song" key={itr}>
                 <div className="song-number" key={`${itr}`}>{song_num}</div> 
                 {this.parseSong(new_song_block)}
-                <div className="line" key={`g-${itr}`}>&nbsp;</div>
                 </div>
+                </>
                 ); 
     }    else return (
             <>

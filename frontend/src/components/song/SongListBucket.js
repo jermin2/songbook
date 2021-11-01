@@ -28,6 +28,7 @@ export const Bucket = (data) => {
 
           useEffect( () => {
             data.updateList(cards);
+            // eslint-disable-next-line
           },[base_cards])
 
           // only update if cards change (due to order changing)
@@ -44,6 +45,7 @@ export const Bucket = (data) => {
           //Only want to update when item is dropped
         const callUpdateOnDrop = useCallback( () => {
             data.updateList(cards);
+            // eslint-disable-next-line
         }, [cards]);
 
         const moveCard = useCallback((dragIndex, hoverIndex) => {

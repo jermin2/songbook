@@ -3,7 +3,7 @@
     color: black;
     height: 100%;
     background:white;
-    width: 100mm;
+    width: 97mm;
     padding-left: 30px;
     padding-right:5px;
 }
@@ -22,6 +22,7 @@
 .song-number {
     font-size:large;
     font-weight:bold;
+    padding-top:5mm;
 }
 
 .chord {

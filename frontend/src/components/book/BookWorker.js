@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
+var API_URL = 'http://localhost:8000';
 
 axios.defaults.xsrfHeaderName = 'x-csrftoken'
 axios.defaults.xsrfCookieName = 'csrftoken'
@@ -25,14 +25,14 @@ export default class BookWorker {
         const url = `${API_URL}/api/book/`;
         return axios.get(url).then(response => {
             console.log("Fetched ", response.data.length, "books")
-            return response.data }).catch(e => console.log(e));
+            return response.data }).catch(e => {throw e});
     }
 
     fetchBook(id) {
         const url = `${API_URL}/api/book/${id}`;
         return axios.get(url).then(response => {
             console.log("Fetched ", response.data)
-            return response.data }).catch(e => console.log(e));
+            return response.data }).catch(e => {throw e});
     }
 
 
@@ -43,8 +43,7 @@ export default class BookWorker {
         return axios.put(url,book, headers).then(response => {
             return (response);
         }).catch(e => {
-            console.log(e);
-            alert("An error occured");
+            throw e;
         })
     }
 
@@ -56,8 +55,7 @@ export default class BookWorker {
             return response.data;
         }
          ).catch(e => {
-            console.log(e);
-            alert("An error occured");
+            throw e;
         })
     }
 
@@ -69,8 +67,7 @@ export default class BookWorker {
             return response.data
         }
          ).catch(e => {
-            console.log(e);
-            alert("An error occured");
+            throw e;
         });
     }
 
@@ -80,8 +77,7 @@ export default class BookWorker {
             return response.data
         }
          ).catch(e => {
-            console.log(e);
-            alert("An error occured");
+            throw e;
         });    
     }
 

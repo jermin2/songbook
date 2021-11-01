@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { Route } from 'react-router-dom';
 import {SongsList} from './components/song/SongsList'
@@ -93,16 +93,17 @@ class App extends Component {
           <h1 className="title"><Link to="/">Song Book</Link></h1>
 
           <div className="content">
-            <Route path="/" exact render={(props) => <SongsList {...props} mode={'SONG_LIST'} />} /> 
-            <Route path="/song/:id/edit" component={SongEdit} />
-            <Route path="/book/:id/edit"  component={BookEdit} />
-            <Route path="/add/song" exact component={SongEdit} />
-            <Route path="/printer/:id" exact component={BookPrinter} />
-            <Route path="/printer/" exact render={(props) => <PrinterList {...props} userLoggedIn={this.state.userLoggedIn} />} />
-            <Route path="/print/:id" exact component={BookPrinterPage} />
-            <Route path="/song/:id" exact render={(props) => <SongDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
+            <Switch>
+            <Route exact path="/song/:id/edit" component={SongEdit} />
+            <Route exact path="/book/:id/edit"  component={BookEdit} />
+            <Route exact path="/add/song"  component={SongEdit} />
+            <Route exact path="/printer/:id"  component={BookPrinter} />
+            <Route exact path="/printer/"  render={(props) => <PrinterList {...props} userLoggedIn={this.state.userLoggedIn} />} />
+            <Route exact path="/print/:id"  component={BookPrinterPage} />
+            <Route exact path="/song/:id"  render={(props) => <SongDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
             <Route exact path="/book/:id" render={(props) => <BookDisplay {...props} userLoggedIn={this.state.userLoggedIn} />} />
-
+            <Route exact path="/"  render={(props) => <SongsList {...props} mode={'SONG_LIST'} />} /> 
+            </Switch>
           </div>
         </div>
       </div>

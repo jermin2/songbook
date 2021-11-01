@@ -24,13 +24,11 @@ export const BookEdit = (data) => {
     function handleClick() {
         //we need to increment each book index, since it is 0 based
         //might as well strip out the lyrics and title so we don't need to send so much
-        console.log("book pre", book);
         for (const s of book.songs){
             s.index = s.index + 1;
             s.lyrics = "";
             s.title = "";
         }
-        console.log(book);
         bookService.updateBook(book);
         data.history.push(`/book/${book.book_id}`);
     }
@@ -38,7 +36,6 @@ export const BookEdit = (data) => {
     function updateSongOrder(newList){
         if(!newList || newList.length===0) return;
         const newbook =  {...book, songs:newList}
-        console.log("newlis", newList)
         setBook(newbook)
     }
 
@@ -51,11 +48,9 @@ export const BookEdit = (data) => {
         // if the id was found
         if (book.songs.some( e=> e.song_id === id) ) {
             //remove it
-            // console.log("setid", "remove");
             songList = book.songs.filter( e => e.song_id !== id );
         }else {
             songList = [...book.songs,{song_id: id}]
-            // console.log("setid", "add", songList);
         }
         const newbook =  {...book, songs:songList}
         setBook(newbook)

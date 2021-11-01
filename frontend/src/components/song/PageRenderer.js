@@ -40,13 +40,13 @@ export const PageRenderer = (data) => {
         let curAreaId = 1
 
         // handle print options \a for new area 
-        const splits = data.lyrics.split(/(\\a)/g);
+        const splits = data.lyrics.split(/(\\a\n)/g);
 
         for(const lyric_block of splits){
 
             // Check for print options \a. If found, add a new area
             if (lyric_block.startsWith('\\a')){
-                var [e, curAreaId_t, curPageId_t] = getNewArea(curAreaId, curPageId)
+                var [, curAreaId_t, curPageId_t] = getNewArea(curAreaId, curPageId)
                 curPageId = curPageId_t;
                 curAreaId = curAreaId_t;
 
@@ -58,6 +58,7 @@ export const PageRenderer = (data) => {
                     render(song_blocks, createSongBlock);
                 } else { // verse mode
                     const verse_block = lyric_block.split('\n\n');
+
                     [curAreaId, curPageId ] = render(verse_block, createSongBlock, curAreaId, curPageId );
                 }
 

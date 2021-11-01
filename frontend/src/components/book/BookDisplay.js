@@ -35,7 +35,7 @@ class BookDisplay extends Component {
                 self.setState({
                     book: result
                 })
-            })
+            }).catch(e => this.props.history.push('/'))
         }
     }
 
@@ -56,7 +56,7 @@ class BookDisplay extends Component {
                         book: result,
                         selectedSong: -1
                     })
-                })
+                }).catch(e => this.props.history.push('/'))
             }
         }
     }

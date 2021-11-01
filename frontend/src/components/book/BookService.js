@@ -69,9 +69,22 @@ export default class BookService {
 
     getBook(id){
 
-        return booksTable.getItem(id.toString()).then( result => result).catch(e => console.log(e) );
-        // const url = `${API_URL}/api/book/${id}`;
-        // return axios.get(url).then(response => response.data).catch(e => console.log(e));
+        return booksTable.getItem(id.toString()).then( result => {
+            console.log("result book", result);
+            if(result) return result;
+            //If no result...
+
+            return bookWorker.fetchBook(id).then( response => {
+                return response;
+            }).catch(e => {
+                console.log("no such book")
+                alert('Invalid link')
+                throw e;
+            })
+        }).catch(e => {
+            console.log(e);
+            throw e;
+        })
     }
 
     async loadBooks(){
@@ -92,6 +105,7 @@ export default class BookService {
             alert("Deleted!")
         }).catch( e => {
             console.log(e);
+            alert("An error occured. Are you logged in?");
         })
     }
 
@@ -105,18 +119,19 @@ export default class BookService {
             alert("Success");
         }).catch(e => {
             console.log(e, b);
-            alert("An error occured");
+            alert("An error occured. Are you logged in?");
         })
 
     }
 
     updateBook(book){
         bookWorker.updateBook(book).then( response => {
+            console.log("update error", response);
             booksTable.setItem(book.book_id.toString(), book);
             alert("Success");}
          ).catch(e => {
             console.log(e);
-            alert("An error occured");
+            alert("An error occured. Are you logged in?");
         })
     }
 }
