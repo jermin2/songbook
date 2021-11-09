@@ -14,16 +14,19 @@ Hosted on PythonAnywhere @ https://jermin2.pythonanywhere.com/api
 
 ### API Routes:
 - song
-Allows fetching, adding, updating, deleting of songs
+-- Allows fetching, adding, updating, deleting of songs
 - book
-Allows fetching, adding, updating, deleting of books
+-- Allows fetching, adding, updating, deleting of books
 - update
+-- Gets the length of the song and book tables to determine whether to update the local database
+- printer
+-- The saved text and style used for printing books
 
 ## Program Structure
 
 There are three main modules
 ### Song
-This controls the display of the song, and display of the song list. 
+This controls the display of the song, and display of the song list
 Included functionality is the hiding of all the chords and increase/decrease of Capo
 
 ### Book
