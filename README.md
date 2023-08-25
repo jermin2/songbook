@@ -13,9 +13,9 @@ Contains api
 Hosted on PythonAnywhere @ https://jermin2.pythonanywhere.com/api
 
 Requires Django and the following modules
--- django-cors-headers
--- djangorestframework
--- djangorestframework-simplejwt
+- django-cors-headers
+- djangorestframework
+- djangorestframework-simplejwt
 
 ### API Routes:
 - song
